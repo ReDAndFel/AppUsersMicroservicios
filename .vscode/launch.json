@@ -1,0 +1,35 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "ConsumerApplication",
+            "request": "launch",
+            "mainClass": "com.example.consumer.ConsumerApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "ConsumerApplication",
+            "request": "launch",
+            "mainClass": "com.uq.consumer.consumer.ConsumerApplication",
+            "projectName": ""
+        },
+        {
+            "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.uq.client.Main",
+            "projectName": "client"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-UsersApplication<users>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.example.users.UsersApplication",
+            "projectName": "users",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

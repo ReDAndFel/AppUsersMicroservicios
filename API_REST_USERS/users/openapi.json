@@ -1,0 +1,350 @@
+{
+    "openapi": 3.1,
+    "info": {
+        "title": "RESTful API",
+        "version": "1.0"
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "paths": {
+        "/usuarios/{id}": {
+            "get": {
+                "summary": "Obtener un usuario por su ID",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID del usuario"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "id": 1,
+                                    "firstName": "Elena",
+                                    "lastName": "García",
+                                    "email": "elena.garcia@example.com",
+                                    "contrasena": "securepass",
+                                    "created_at": "2024-03-05T14:20:00",
+                                    "updated_at": "2024-03-05T14:20:00"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Actualizar un usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID del usuario a actualizar"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "nombre": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "contraseña": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Usuario actualizado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "id": 1,
+                                    "firstName": "NuevoNombre",
+                                    "lastName": "García",
+                                    "email": "nuevo.correo@example.com",
+                                    "contrasena": "nuevacontraseña",
+                                    "created_at": "2024-03-05T14:20:00",
+                                    "updated_at": "2024-03-11T10:30:00"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros incorrectos"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Eliminar un usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID del usuario a eliminar"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Usuario eliminado exitosamente"
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado"
+                    }
+                }
+            }
+        },
+        "/usuarios": {
+            "post": {
+                "summary": "Crear un nuevo usuario",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "contrasena": {
+                                        "type": "string"
+                                    },
+                                    "created_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "updated_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "required": [
+                                    "firstName",
+                                    "lastName",
+                                    "email",
+                                    "contrasena"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado exitosamente",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "id": 1,
+                                    "firstName": "Elena",
+                                    "lastName": "García",
+                                    "email": "elena.garcia@example.com",
+                                    "contrasena": "securepass",
+                                    "created_at": "2024-03-05T14:20:00",
+                                    "updated_at": "2024-03-05T14:20:00"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Parámetros incorrectos o faltantes"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "summary": "Inicio de sesión de usuario",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "contrasena": {
+                                        "type": "string"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "contrasena"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Inicio de sesión exitoso",
+                        "content": {
+                            "text/plain": {
+                                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Los atributos 'usuario' y 'clave' son obligatorios"
+                    }
+                }
+            }
+        },
+        "/actualizarContraseña/{id}": {
+            "put": {
+                "summary": "Actualizar contraseña de usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        },
+                        "description": "ID del usuario a actualizar la contraseña"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer",
+                                        "format": "int32"
+                                    }
+                                },
+                                "required": [
+                                    "id"
+                                ]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contraseña actualizada correctamente",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 200,
+                                    "error": false,
+                                    "message": "contraseña actualizada correctamente"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "El token no es válido para el correo proporcionado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 401,
+                                    "error": true,
+                                    "message": "El token no es válido para el correo proporcionado"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Se requiere un token JWT en la cabecera Authorization",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 403,
+                                    "error": true,
+                                    "message": "Se requiere un token JWT en la cabecera Authorization"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/usuarios/recuperarContrasena/{email}": {
+            "post": {
+                "summary": "Recuperar contraseña",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "email"
+                        },
+                        "description": "Correo electrónico del usuario para recuperar la contraseña"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Solicitud de recuperación de contraseña exitosa",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 200,
+                                    "error": false,
+                                    "message": "Correo de recuperación enviado"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "example": {
+                                    "status": 404,
+                                    "error": true,
+                                    "message": "Usuario no encontrado"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
