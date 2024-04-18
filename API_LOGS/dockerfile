@@ -1,33 +1,14 @@
-# Utiliza una imagen base que tenga soporte para PHP y Composer, por ejemplo:
-    FROM php:8.2-fpm
+# Usa la imagen oficial de Python 3 como base
+FROM python:3
 
-    # Instalar dependencias de sistema
-    RUN apt-get update && apt-get install -y \
-        git \
-        zip \
-        unzip \
-        libzip-dev \
-        libonig-dev \
-        libxml2-dev \
-        libpng-dev \
-        libjpeg-dev \
-        && rm -rf /var/lib/apt/lists/*
-    
-    # Instalar el controlador de MySQL para PHP
-    RUN docker-php-ext-install mysqli pdo pdo_mysql
-    RUN docker-php-ext-install sockets
-    
-    # Copiar el código fuente de la aplicación
-    COPY . /var/www/html
-    WORKDIR /var/www/html
-    
-    # Instalar las dependencias de PHP usando Composer
-    RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-        && composer install --no-dev --no-interaction --optimize-autoloader
-    
-     
-    # Definir el comando de inicio de la aplicación Laravel
-    #CMD ["php", "artisan", "serve"]
-    CMD ["sh", "-c", "php artisan serve && php artisan rabbitmq:receive"]
+# Establece el directorio de trabajo en /app
+WORKDIR /app
 
-    
+# Copia los archivos necesarios al contenedor
+COPY . .
+
+# Instala las dependencias de la aplicación
+RUN pip install -r requirements.txt
+
+# Ejecuta la aplicación cuando se inicie el contenedor
+CMD ["python", "init.py"]
