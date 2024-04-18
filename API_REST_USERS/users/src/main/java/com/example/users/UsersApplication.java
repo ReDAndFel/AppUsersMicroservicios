@@ -7,6 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class UsersApplication {
 
 	public static void main(String[] args) {
+
+		try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 		System.err.println("App iniciada");
 		SpringApplication.run(UsersApplication.class, args);
 	}
