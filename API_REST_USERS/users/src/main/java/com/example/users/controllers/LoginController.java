@@ -13,8 +13,6 @@ import com.example.users.models.UsuarioModel;
 import com.example.users.models.dtos.LoginDTO;
 import com.example.users.repositories.UsuarioRepository;
 import com.example.users.services.JwtInterface;
-import com.example.users.services.RabbitService;
-
 
 @CrossOrigin("*")
 @RestController
@@ -26,9 +24,6 @@ public class LoginController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @Autowired
-    private RabbitService rabbitService;
-
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody LoginDTO login) {
 
@@ -39,17 +34,14 @@ public class LoginController {
 
         if (login != null && !email.isEmpty() && !password.isEmpty()) {
             UsuarioModel userAux = usuarioRepository.obtenerUsuarioPorEmail(email);
-            
-            if(userAux != null && userAux.getContrasena().equals(login.getPassword())){
+
+            if (userAux != null && userAux.getContrasena().equals(login.getPassword())) {
                 String token = jwtUtil.generateToken(email);
-                System.out.println("Sending message to RabbitMQ...");
-                rabbitService.sendMessage("El usuario con correo "+ email + " se ha logueado");
-                System.out.println("Message sent to RabbitMQ");
                 return ResponseEntity.ok(token);
-            }else{
+            } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("No se encontró usuario con esas credenciales");
-            }           
+                        .body("No se encontró usuario con esas credenciales");
+            }
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("Los atributos 'usuario' y 'clave' son obligatorios");

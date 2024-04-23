@@ -1,11 +1,12 @@
 import datetime
+import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
 
 app = Flask(__name__)
 #mysql+mysqlconnector://usuario_database:password_database@host_database/name_database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:fel1004684293@localhost/api_logs'
+app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{os.environ['DB_USERNAME']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
 db = SQLAlchemy(app)
 
 class Log(db.Model):
@@ -104,4 +105,4 @@ def create_log():
     return jsonify({'message': 'Log creado exitosamente'}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,host='0.0.0.0', port=os.environ['PORT'])

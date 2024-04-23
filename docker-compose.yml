@@ -1,16 +1,5 @@
 version: "3.7"
 services:
-  rabbitmq:
-    image: "rabbitmq:3-management"
-    environment:
-      RABBITMQ_DEFAULT_USER: admin
-      RABBITMQ_DEFAULT_PASS: admin
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - my-net
-
   mysqldb:
     build:
       context: ./API_REST_USERS/
@@ -30,7 +19,7 @@ services:
 
   mysql_logs:
     build:
-      context: ./API_LOGS/datalogs/
+      context: ./API_LOGS/database/
       dockerfile: dockerfile
     restart: always
     ports:
@@ -43,7 +32,7 @@ services:
       MYSQL_PASSWORD: DBLOGS
       MYSQL_ROOT_PASSWORD: DBLOGS
     volumes:
-      - ./API_LOGS/datalogs/datalogs.sql:/docker-entrypoint-initdb.d/datalogs.sql
+      - ./API_LOGS/database/data.sql:/docker-entrypoint-initdb.d/data.sql
 
   api_users:
     build:
@@ -63,16 +52,8 @@ services:
       HOST_SMTP: smtp.sendgrid.net
       PORT_SMTP: 465
       USER_SMTP: apikey
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-      RABBITMQ_USERNAME: admin
-      RABBITMQ_PASSWORD: admin
-      RABBITMQ_QUEUE: queue_auth
-      RABBITMQ_EXCHANGE: exchange_auth
-      RABBITMQ_ROUTING_KEY: auth.user.login
     depends_on:
       - mysqldb
-      - rabbitmq
 
   api_logs:
     build:
@@ -80,25 +61,22 @@ services:
       dockerfile: dockerfile
     restart: always
     ports:
-      - 8453:8000
+      - 8453:8083
     networks:
       - my-net
     environment:
+      PORT: 8083
       DB_HOST: mysql_logs
-      DB_PORT: 3307
-      DB_DATABASE: api_logs
+      DB_NAME: api_logs
       DB_USERNAME: DBLOGS
       DB_PASSWORD: DBLOGS
-      RABBITMQ_HOST: rabbitmq
-      RABBITMQ_PORT: 5672
-      RABBITMQ_USERNAME: admin
-      RABBITMQ_PASSWORD: admin
-      RABBITMQ_QUEUE: queue_auth
-      RABBITMQ_EXCHANGE: exchange_auth
-      RABBITMQ_ROUTING_KEY: auth.user.login
     depends_on:
-      - rabbitmq
       - mysql_logs
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10  
 
 networks:
   my-net:
