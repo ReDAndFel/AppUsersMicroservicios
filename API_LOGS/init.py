@@ -1,5 +1,8 @@
 import datetime
+import json
 import os
+import asyncio
+import nats
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import and_
@@ -8,6 +11,61 @@ app = Flask(__name__)
 #mysql+mysqlconnector://usuario_database:password_database@host_database/name_database
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{os.environ['DB_USERNAME']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
 db = SQLAlchemy(app)
+"""
+async def natsmain():
+    # Connect to NATS!
+    nc = await nats.connect(os.environ['NATS_URL'])
+
+    # Receive messages on 'foo'
+    sub = await nc.subscribe(os.environ['NATS_TEMA'])
+
+    # Process a message
+    msg = await sub.next_msg()
+    print("Received:", msg)
+
+    # Make sure all published messages have reached the server
+    await nc.flush()
+
+    # Close NATS connection
+    await nc.close()
+"""
+async def handle_message(msg):
+     # Recibe el mensaje en binario
+    message_data = msg.data
+
+    # Convierte el mensaje binario en un objeto JSON
+    try:
+        log_data = json.loads(message_data.decode())
+    except json.JSONDecodeError:
+        print("Error al decodificar mensaje JSON")
+        return
+
+    # Procesa el objeto JSON
+    log = Log(
+        tipo=log_data["tipo"],
+        aplicacion=log_data["aplicacion"],
+        clase_modulo=log_data["clase_modulo"],
+        resumen=log_data["resumen"],
+        descripcion=log_data["descripcion"]
+    )
+
+    db.session.add(log)
+    db.session.commit()
+
+    print(f"Mensaje procesado: {log_data}")
+
+# Crear un bucle de eventos
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
+print("url de nats es: ", os.environ['NATS_URL'] )
+print("Tema de nats es: ", os.environ['NATS_TEMA'] )
+
+# Conectar a NATS
+nc = loop.run_until_complete(nats.connect(os.environ['NATS_URL']))
+
+# Suscribirse al tema
+sub = loop.run_until_complete(nc.subscribe(os.environ['NATS_TEMA'], cb=handle_message))
 
 class Log(db.Model):
     
@@ -105,4 +163,9 @@ def create_log():
     return jsonify({'message': 'Log creado exitosamente'}), 201
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0', port=os.environ['PORT'])
+    app.run(debug=True, host='0.0.0.0' , port=os.environ['PORT'])
+    #asyncio.run(natsmain())
+    try:
+        loop.run_forever()
+    finally:
+        loop.close()

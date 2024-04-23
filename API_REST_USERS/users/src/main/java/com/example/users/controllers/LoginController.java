@@ -1,7 +1,7 @@
 package com.example.users.controllers;
 
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -9,10 +9,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.users.DTO.LogDTO;
 import com.example.users.models.UsuarioModel;
 import com.example.users.models.dtos.LoginDTO;
 import com.example.users.repositories.UsuarioRepository;
 import com.example.users.services.JwtInterface;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.nats.client.Connection;
 
 @CrossOrigin("*")
 @RestController
@@ -24,8 +29,14 @@ public class LoginController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Value("${nats.server.tema}")
+    private String natsTema;
+
+    @Autowired
+    private Connection natsConnection;
+
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginDTO login) {
+    public ResponseEntity<String> login(@RequestBody LoginDTO login) throws JsonProcessingException {
 
         String email = login.getEmail();
         String password = login.getPassword();
@@ -37,6 +48,12 @@ public class LoginController {
 
             if (userAux != null && userAux.getContrasena().equals(login.getPassword())) {
                 String token = jwtUtil.generateToken(email);
+                System.out.println("tema a enviar mensaje es: " + natsTema);
+                LogDTO logDTO = new LogDTO("Login", "Api_users", "LoginController", "Usuario logueado",
+                        "El usuario con correo " + login.getEmail() + " se logueo");
+                ObjectMapper objectMapper = new ObjectMapper();
+                String logJson = objectMapper.writeValueAsString(logDTO);
+                natsConnection.publish(natsTema, logJson.getBytes());
                 return ResponseEntity.ok(token);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)

@@ -1,5 +1,12 @@
 version: "3.7"
 services:
+  nats:
+    image: nats:latest
+    restart: always
+    ports:
+      - 4222:4222
+    networks:
+      - my-net
   mysqldb:
     build:
       context: ./API_REST_USERS/
@@ -52,8 +59,12 @@ services:
       HOST_SMTP: smtp.sendgrid.net
       PORT_SMTP: 465
       USER_SMTP: apikey
+      NATS_URL: nats://nats:4222
+      NATS_TEMA: logs
+
     depends_on:
       - mysqldb
+      - nats
 
   api_logs:
     build:
@@ -70,8 +81,11 @@ services:
       DB_NAME: api_logs
       DB_USERNAME: DBLOGS
       DB_PASSWORD: DBLOGS
+      NATS_URL: nats://nats:4222
+      NATS_TEMA: logs
     depends_on:
       - mysql_logs
+      - nats
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
