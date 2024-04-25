@@ -54,6 +54,8 @@ public class LoginController {
                 ObjectMapper objectMapper = new ObjectMapper();
                 String logJson = objectMapper.writeValueAsString(logDTO);
                 natsConnection.publish(natsTema, logJson.getBytes());
+                System.out.println("Mensaje enviado!");
+
                 return ResponseEntity.ok(token);
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)

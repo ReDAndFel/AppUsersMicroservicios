@@ -3,6 +3,7 @@ services:
   nats:
     image: nats:latest
     restart: always
+    command: ["-V", "-DV"]
     ports:
       - 4222:4222
     networks:
@@ -31,7 +32,7 @@ services:
       dockerfile: dockerfile
     restart: always
     ports:
-      - 13302:3307
+      - 13302:3306
     networks:
       - my-net
     environment:
