@@ -1,10 +1,9 @@
 import datetime
 import json
 import os
-import asyncio
-from nats.aio.client import Client as NATS
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from nats import NATS, Msg
 from sqlalchemy import and_
 
 app = Flask(__name__)
@@ -13,40 +12,8 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://{os.environ['DB_USERNAME']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
 )
 db = SQLAlchemy(app)
-# Variable global para almacenar la conexión NATS
-nats_client = None
-
-
-# Función para establecer la conexión NATS
-async def connect_nats():
-    nc = NATS()
-    await nc.connect(os.environ["NATS_URL"])
-    return nc
-
-
-# Función de devolución de llamada para procesar mensajes recibidos
-async def process_message(msg):
-    print("procesando mensaje")
-    subject = msg.subject
-    data = msg.data.decode()
-    print(f"Received message on '{subject}': {data}")
-    # Agrega aquí la lógica para procesar el mensaje recibido
-
-
-# Inicializar la conexión NATS y suscribirse a los temas deseados
-async def setup_nats():
-    global nats_client
-    print("Inicializando conexion de nats")
-    nats_client = await connect_nats()
-    print("Conexion de nats realizada")
-    # Suscribirse a uno o más temas
-    print("Suscribiendose a el tema")
-    await nats_client.subscribe(os.environ["NATS_TEMA"], cb=process_message)
-    print("Suscrito a tema")
-
 
 class Log(db.Model):
-
     __tablename__ = "logs"  # Especifica el nombre de la tabla
     id = db.Column(db.BigInteger, primary_key=True)
     created_at = db.Column(db.DateTime, nullable=True, default=datetime.datetime.now)
@@ -62,6 +29,35 @@ class Log(db.Model):
     resumen = db.Column(db.String(255), nullable=False)
     descripcion = db.Column(db.String(255), nullable=False)
 
+print("configurando nats...")
+# Configurar el cliente NATS
+nc = NATS()
+print("conectando a nats...")
+
+# Conectar al servidor NATS
+nc.connect("nats://nats:4444")
+print("conectado a nats!")
+
+
+# Suscribirse al tema 'logs' y definir la función de controlador
+@nc.subscribe("logs")
+def handle_logs(msg: Msg):
+    print("Recibiendo mensaje por el tema logs...")
+    data = msg.data.decode()
+    # Suponiendo que los mensajes son objetos JSON
+    log_data = json.loads(data)
+    
+    print("Mensaje recibido!")
+    # Crear un registro de log en la base de datos
+    log = Log(
+        tipo=log_data["tipo"],
+        aplicacion=log_data["aplicacion"],
+        clase_modulo=log_data["clase_modulo"],
+        resumen=log_data["resumen"],
+        descripcion=log_data["descripcion"],
+    )
+    db.session.add(log)
+    db.session.commit()
 
 @app.route("/logs", methods=["GET"])
 def get_logs():
@@ -161,7 +157,4 @@ def create_log():
 
 
 if __name__ == "__main__":
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.create_task(setup_nats())
     app.run(debug=True, host="0.0.0.0", port=os.environ["PORT"])
