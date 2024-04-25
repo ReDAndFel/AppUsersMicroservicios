@@ -14,7 +14,9 @@ public class NatsConfig {
 
     @Bean
     public Connection natsConnection() throws Exception {
-        System.out.println("Url de nats es: "+ natsServerUrl);
-        return Nats.connect(natsServerUrl);
+        System.out.println("Estableciendo conexion nats...");
+        Connection connection = Nats.connect(natsServerUrl);
+        System.out.println("Se establecio la conexion con nats");
+        return connection;
     }
 }
