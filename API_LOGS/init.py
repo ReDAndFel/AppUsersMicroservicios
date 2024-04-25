@@ -45,7 +45,7 @@ async def main():
 
     print("suscribiendose al tema....")
     # Suscribirse al tema 'logs' y definir la función de controlador
-    await nc.subscribe("logs", cb=handle_logs)
+    await nc.subscribe(os.environ["NATS_TEMA"], cb=handle_logs)
     print("suscripcion realizada")
 
     @app.route("/logs", methods=["GET"])
