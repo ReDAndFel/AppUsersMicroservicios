@@ -164,5 +164,31 @@ async def handle_logs(msg: Msg):
     db.session.add(log)
     db.session.commit()
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    now = datetime.datetime.now()
+    start_time = app.config.get('START_TIME')
+    uptime = str(now - start_time)
+
+    health_data = {
+        "status": "Ok",
+        "version": "1.0.0",
+        "uptime": uptime
+    }
+
+    return jsonify(health_data)
+
+@app.route('/health/live', methods=['GET'])
+def liveness_check():
+    # Agrega aquí la lógica para verificar si la aplicación está ejecutándose
+    return jsonify({"status": "OK"})
+
+@app.route('/health/ready', methods=['GET'])
+def readiness_check():
+    # Agrega aquí la lógica para verificar si la aplicación está lista para recibir tráfico
+    return jsonify({"status": "OK"})
+
 if __name__ == "__main__":
+    import datetime
+    app.config['START_TIME'] = datetime.datetime.now()
     asyncio.run(main())

@@ -62,7 +62,7 @@ services:
       PORT_SMTP: 465
       USER_SMTP: apikey
       NATS_URL: nats://nats:4222
-      NATS_TEMA: logs
+      NATS_TEMA: mensajes
 
     depends_on:
       - mysqldb
@@ -84,7 +84,7 @@ services:
       DB_USERNAME: DBLOGS
       DB_PASSWORD: DBLOGS
       NATS_URL: nats://nats:4222
-      NATS_TEMA: logs
+      NATS_TEMA: mensajes
     depends_on:
       - mysql_logs
       - nats
