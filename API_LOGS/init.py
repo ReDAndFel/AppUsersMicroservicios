@@ -179,12 +179,12 @@ def get_database_name():
     database_name = parsed_uri.path.lstrip('/')
     return database_name
     
-async def verificar_conexion_db():
+def verificar_conexion_db():
     retries = 0
     while retries < MAX_RETRIES:
         try:
-            db.session.execute('SELECT 1')
-            return 'OK'
+            db.engine.connect().close()
+            return 'UP'
         except Exception as e:
             retries += 1
             print(f"Error al verificar la conexión a la base de datos. Reintento {retries}/{MAX_RETRIES}")
@@ -197,8 +197,7 @@ async def verificar_conexion_nats():
     while retries < MAX_RETRIES:
         try:
             res = await nats_client.request(os.environ["NATS_URL"], b'ping', timeout=5)
-            if res.data == b'pong':
-                return 'OK'
+            return "UP" if res else "DOWN"
         except Exception as e:
             retries += 1
             print(f"Error al verificar la conexión a NATS. Reintento {retries}/{MAX_RETRIES}")
@@ -213,11 +212,11 @@ async def health_check():
     uptime = str(now - start_time)
     # Obtener el nombre de la base de datos
     database_name = get_database_name()
-    db_status = await verificar_conexion_db()
+    db_status = verificar_conexion_db()
     nats_status = await verificar_conexion_nats()
 
-    if db_status == 'OK' and nats_status == 'OK':
-        status = 'OK'
+    if db_status == 'UP' and nats_status == 'UP':
+        status = 'UP'
     else:
         status = 'DOWN'
 
@@ -246,15 +245,15 @@ async def health_check():
 @app.route('/health/live', methods=['GET'])
 async def liveness_check():
     # Agrega aquí la lógica para verificar si la aplicación está ejecutándose
-    return jsonify({"status": "OK"})
+    return jsonify({"status": "UP"})
 
 @app.route('/health/ready', methods=['GET'])
 async def readiness_check():
-    db_status = await verificar_conexion_db()
+    db_status = verificar_conexion_db()
     nats_status = await verificar_conexion_nats()
 
-    if db_status == 'OK' and nats_status == 'OK':
-        return jsonify({"status": "OK"})
+    if db_status == 'UP' and nats_status == 'UP':
+        return jsonify({"status": "UP"})
     else:
         return jsonify({"status": "DOWN"})
 
