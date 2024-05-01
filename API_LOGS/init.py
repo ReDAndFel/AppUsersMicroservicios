@@ -1,6 +1,8 @@
 import datetime
 import json
 import os
+import time
+from urllib.parse import urlparse
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from nats import NATS
@@ -18,6 +20,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://DBLOGS:DBLOGS@localhost:13302/api_logs"
 )"""
 db = SQLAlchemy(app)
+nats_client = NATS()
+
+MAX_RETRIES = 3  # Número máximo de reintentos
+RETRY_DELAY = 5  # Tiempo de espera en segundos entre reintentos
 
 class Log(db.Model):
     __tablename__ = "logs"  # Especifica el nombre de la tabla
@@ -34,6 +40,7 @@ class Log(db.Model):
     clase_modulo = db.Column(db.String(255), nullable=False)
     resumen = db.Column(db.String(255), nullable=False)
     descripcion = db.Column(db.String(255), nullable=False)
+
 async def main():
     # Configurar el cliente NATS
     nc = NATS()
@@ -164,29 +171,92 @@ async def handle_logs(msg: Msg):
     db.session.add(log)
     db.session.commit()
 
+
+# Obtener el nombre de la base de datos desde la URI de la base de datos
+def get_database_name():
+    db_uri = app.config["SQLALCHEMY_DATABASE_URI"]
+    parsed_uri = urlparse(db_uri)
+    database_name = parsed_uri.path.lstrip('/')
+    return database_name
+    
+async def verificar_conexion_db():
+    retries = 0
+    while retries < MAX_RETRIES:
+        try:
+            db.session.execute('SELECT 1')
+            return 'OK'
+        except Exception as e:
+            retries += 1
+            print(f"Error al verificar la conexión a la base de datos. Reintento {retries}/{MAX_RETRIES}")
+            time.sleep(RETRY_DELAY)
+        
+    return 'DOWN'
+
+async def verificar_conexion_nats():
+    retries = 0
+    while retries < MAX_RETRIES:
+        try:
+            res = await nats_client.request(os.environ["NATS_URL"], b'ping', timeout=5)
+            if res.data == b'pong':
+                return 'OK'
+        except Exception as e:
+            retries += 1
+            print(f"Error al verificar la conexión a NATS. Reintento {retries}/{MAX_RETRIES}")
+            time.sleep(RETRY_DELAY)
+
+    return 'DOWN'
+
 @app.route('/health', methods=['GET'])
-def health_check():
+async def health_check():
     now = datetime.datetime.now()
     start_time = app.config.get('START_TIME')
     uptime = str(now - start_time)
+    # Obtener el nombre de la base de datos
+    database_name = get_database_name()
+    db_status = await verificar_conexion_db()
+    nats_status = await verificar_conexion_nats()
+
+    if db_status == 'OK' and nats_status == 'OK':
+        status = 'OK'
+    else:
+        status = 'DOWN'
 
     health_data = {
-        "status": "Ok",
+        "status": status,
         "version": "1.0.0",
-        "uptime": uptime
+        "checks": [
+            {
+                "db": {
+                    "name": database_name,
+                    "status": db_status,
+                    "from": uptime
+                },
+            },
+            {
+                "nats": {
+                    "status": nats_status,
+                    "from": uptime
+                }
+            }
+        ]
     }
 
     return jsonify(health_data)
 
 @app.route('/health/live', methods=['GET'])
-def liveness_check():
+async def liveness_check():
     # Agrega aquí la lógica para verificar si la aplicación está ejecutándose
     return jsonify({"status": "OK"})
 
 @app.route('/health/ready', methods=['GET'])
-def readiness_check():
-    # Agrega aquí la lógica para verificar si la aplicación está lista para recibir tráfico
-    return jsonify({"status": "OK"})
+async def readiness_check():
+    db_status = await verificar_conexion_db()
+    nats_status = await verificar_conexion_nats()
+
+    if db_status == 'OK' and nats_status == 'OK':
+        return jsonify({"status": "OK"})
+    else:
+        return jsonify({"status": "DOWN"})
 
 if __name__ == "__main__":
     import datetime
