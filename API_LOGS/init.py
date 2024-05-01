@@ -215,13 +215,13 @@ async def health_check():
     db_status = verificar_conexion_db()
     nats_status = await verificar_conexion_nats()
 
-    if db_status == 'UP' and nats_status == 'UP':
+    if db_status == 'UP' or nats_status == 'UP':
         status = 'UP'
     else:
         status = 'DOWN'
 
     health_data = {
-        "status": status,
+        "statusOverall": status,
         "version": "1.0.0",
         "checks": [
             {
@@ -252,7 +252,7 @@ async def readiness_check():
     db_status = verificar_conexion_db()
     nats_status = await verificar_conexion_nats()
 
-    if db_status == 'UP' and nats_status == 'UP':
+    if db_status == 'UP' or nats_status == 'UP':
         return jsonify({"status": "UP"})
     else:
         return jsonify({"status": "DOWN"})

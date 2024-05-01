@@ -57,7 +57,6 @@ services:
       SPRING_DATASOURCE_USERNAME: JOHANMY
       SPRING_DATASOURCE_PASSWORD: JOHANMY
       SPRING_DDL-AUTO: update
-      SERVER_PORT: 8082
       HOST_SMTP: smtp.sendgrid.net
       PORT_SMTP: 465
       USER_SMTP: apikey
@@ -93,6 +92,20 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10  
+
+  api_health:
+    build:
+      context: ./API_HEALTHCHECK/
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 8053:8053
+    networks:
+      - my-net
+    environment:
+      SMTP_SERVER: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
 
 networks:
   my-net:

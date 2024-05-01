@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/smtp"
+	"os"
+	"strconv"
 	"sync"
 	"time"
 )
@@ -28,10 +30,53 @@ var healthStatus = make(map[string]MicroserviceHealth)
 var mutex = &sync.Mutex{}
 
 // Configuración SMTP para envío de correos
-var smtpServer = ""
-var smtpPort = 25
-var smtpUser = ""
-var smtpPassword = ""
+var smtpServer = os.Getenv("SMTP_SERVER")
+var smtpPort, _ = strconv.Atoi(os.Getenv("SMTP_PORT"))
+var smtpUser = os.Getenv("SMTP_USER")
+var smtpPassword = os.Getenv("SMTP_PASSWORD")
+
+func checkInitialMicroserviceHealth(microservice Microservice) MicroserviceHealth {
+	resp, err := http.Get(microservice.Endpoint)
+	if err != nil {
+		return MicroserviceHealth{
+			Name:      microservice.Name,
+			Status:    "DOWN",
+			Data:      err.Error(),
+			LastCheck: time.Now(),
+		}
+	}
+	defer resp.Body.Close()
+
+	var health struct {
+		Checks        []map[string]map[string]interface{} `json:"checks"`
+		OverallStatus string                              `json:"statusOverall"`
+	}
+	err = json.NewDecoder(resp.Body).Decode(&health)
+	if err != nil {
+		return MicroserviceHealth{
+			Name:      microservice.Name,
+			Status:    "DOWN",
+			Data:      err.Error(),
+			LastCheck: time.Now(),
+		}
+	}
+
+	var status string
+	if health.OverallStatus == "UP" {
+		status = "UP"
+	} else {
+		status = "DOWN"
+	}
+
+	healthStatus := MicroserviceHealth{
+		Name:      microservice.Name,
+		Status:    status,
+		Data:      health,
+		LastCheck: time.Now(),
+	}
+
+	return healthStatus
+}
 
 func registerMicroservice(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodPost {
@@ -50,10 +95,8 @@ func registerMicroservice(w http.ResponseWriter, r *http.Request) {
 	defer mutex.Unlock()
 
 	microservices[microservice.Name] = microservice
-	healthStatus[microservice.Name] = MicroserviceHealth{
-		Name:   microservice.Name,
-		Status: "UP",
-	}
+	health := checkInitialMicroserviceHealth(microservice)
+	healthStatus[microservice.Name] = health
 }
 
 func getMicroserviceHealth(w http.ResponseWriter, r *http.Request) {
@@ -87,18 +130,22 @@ func getOverallHealth(w http.ResponseWriter, r *http.Request) {
 func checkMicroserviceHealth(name string, endpoint string, frecuency int) {
 	ticker := time.NewTicker(time.Duration(frecuency) * time.Second)
 	quit := make(chan struct{})
+	fmt.Println("Entró en la función check", ticker)
 	go func() {
 		for {
 			select {
 			case <-ticker.C:
-				resp, err := http.Get(endpoint + "/health")
+				resp, err := http.Get(endpoint)
+				fmt.Println(resp)
 				if err != nil {
 					mutex.Lock()
 					healthStatus[name] = MicroserviceHealth{
-						Name:   name,
-						Status: "DOWN",
-						Data:   err.Error(),
+						Name:      name,
+						Status:    "DOWN",
+						Data:      err.Error(),
+						LastCheck: time.Now(),
 					}
+					notifyStatusChange(name, "DOWN", microservices[name].Emails)
 					mutex.Unlock()
 					continue
 				}
@@ -109,9 +156,10 @@ func checkMicroserviceHealth(name string, endpoint string, frecuency int) {
 				if err != nil {
 					mutex.Lock()
 					healthStatus[name] = MicroserviceHealth{
-						Name:   name,
-						Status: "DOWN",
-						Data:   err.Error(),
+						Name:      name,
+						Status:    "DOWN",
+						Data:      err.Error(),
+						LastCheck: time.Now(),
 					}
 					notifyStatusChange(name, "DOWN", microservices[name].Emails)
 					mutex.Unlock()
@@ -119,6 +167,10 @@ func checkMicroserviceHealth(name string, endpoint string, frecuency int) {
 				}
 
 				mutex.Lock()
+				if health.Status == "DOWN" {
+					notifyStatusChange(name, "DOWN", microservices[name].Emails)
+				}
+
 				if health.Status != healthStatus[name].Status {
 					notifyStatusChange(name, health.Status, microservices[name].Emails)
 				}
@@ -141,8 +193,8 @@ func notifyStatusChange(name, status string, emails []string) {
 
 func sendEmail(to []string, subject, body string) {
 	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", smtpUser, to, subject, body)
-	err := smtp.SendMail(fmt.Sprintf("%s:%d", smtpServer, smtpPort),
-		smtp.PlainAuth("", smtpUser, smtpPassword, smtpServer),
+	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpServer)
+	err := smtp.SendMail(fmt.Sprintf("%s:%d", smtpServer, smtpPort), auth,
 		smtpUser, to, []byte(msg))
 	if err != nil {
 		fmt.Printf("Error sending email: %s\n", err)
@@ -150,17 +202,35 @@ func sendEmail(to []string, subject, body string) {
 }
 
 func monitorMicroservice() {
-	for name, ms := range microservices {
-		go checkMicroserviceHealth(name, ms.Endpoint, ms.Frequency)
+	fmt.Println("Entró en la función monitor")
+	for {
+		if len(microservices) == 0 {
+			fmt.Println("Aún no hay microservicios. Esperando")
+			time.Sleep(1 * time.Minute) // Esperar 10 segundos antes de volver a verificar
+			continue
+		}
+
+		for name, ms := range microservices {
+			go checkMicroserviceHealth(name, ms.Endpoint, ms.Frequency)
+		}
+
+		// Esperar un tiempo antes de realizar la próxima iteración
+		time.Sleep(30 * time.Second) // Esperar 1 minuto antes de volver a verificar
 	}
 }
 
 func main() {
+	go func() {
+		for {
+			monitorMicroservice()
+			// Esperar un tiempo antes de reiniciar monitorMicroservice
+			time.Sleep(1 * time.Minute) // Por ejemplo, reiniciar cada 5 minutos
+		}
+	}()
+
 	http.HandleFunc("/register", registerMicroservice)
 	http.HandleFunc("/health/", getMicroserviceHealth)
 	http.HandleFunc("/health", getOverallHealth)
-
-	go monitorMicroservice()
 
 	fmt.Println("Microservice health monitoring server started on: 8053")
 	http.ListenAndServe(":8053", nil)
