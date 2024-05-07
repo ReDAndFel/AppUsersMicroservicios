@@ -1,7 +1,6 @@
 package com.example.users.healthCheck;
 
 import io.nats.client.Connection;
-import io.nats.client.Nats;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.boot.actuate.health.HealthIndicator;
@@ -33,15 +32,6 @@ public abstract class CustomHealthIndicator implements HealthIndicator {
         return builder.build();
     }
 
-    public Health liveHealth() {
-        Health.Builder builder = Health.up();
-        return builder.build();
-    }
-
-    public Health readyHealth() {
-        Health.Builder builder = getHealthBuilder();
-        return builder.build();
-    }
 
     private Health.Builder getHealthBuilder() {
         Duration uptime = Duration.between(startTime, Instant.now());

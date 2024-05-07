@@ -3,11 +3,13 @@ import json
 import os
 import time
 from urllib.parse import urlparse
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
 from nats import NATS
 from nats.aio.client import Msg
 from sqlalchemy import and_
+from prometheus_client import make_wsgi_app, Counter, Gauge, Histogram, generate_latest
+from werkzeug.middleware.dispatcher import DispatcherMiddleware
 import asyncio
 
 app = Flask(__name__)
@@ -16,9 +18,18 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://{os.environ['DB_USERNAME']}:{os.environ['DB_PASSWORD']}@{os.environ['DB_HOST']}/{os.environ['DB_NAME']}"
 )
 
+# Configurar las métricas
+requests_total = Counter('requests_total', 'Total requests')
+requests_by_status = Counter('requests_by_status', 'Requests by status', ['status'])
+requests_latency = Histogram('requests_latency', 'Request latency (seconds)')
+
+# Envolver la aplicación Flask con el middleware de Prometheus
+""" app = make_wsgi_app(app, metrics_endpoint='/metrics')
+app = DispatcherMiddleware(app.wsgi_app, {'/metrics': app}) """
 """app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://DBLOGS:DBLOGS@localhost:13302/api_logs"
 )"""
+
 db = SQLAlchemy(app)
 nats_client = NATS()
 
@@ -55,8 +66,24 @@ async def main():
     await nc.subscribe(os.environ["NATS_TEMA"], cb=handle_logs)
     print("suscripcion realizada")
 
+    @app.route('/metrics')
+    def metrics():
+        # Incrementar métricas
+        requests_total.inc()
+
+        # Generar métricas en formato Prometheus
+        prometheus_metrics = generate_latest()
+
+        # Retornar las métricas
+        return Response(prometheus_metrics, mimetype="text/plain")
+
     @app.route("/logs", methods=["GET"])
     def get_logs():
+        requests_total.inc()
+        status=200 
+        requests_by_status.labels(status).inc()
+        start_time = time.time()
+    
         page = request.args.get("page", 1, type=int)
         per_page = request.args.get("per_page", 10, type=int)
         start_date = request.args.get("from_date")
@@ -92,10 +119,18 @@ async def main():
                 }
             )
 
+        latency = time.time() - start_time
+        requests_latency.observe(latency)
+
         return jsonify({"logs": result, "total": logs.total, "pages": logs.pages})
 
     @app.route("/logs/<application>", methods=["GET"])
     def get_logs_by_application(application):
+        requests_total.inc()
+        status=200 
+        requests_by_status.labels(status).inc()
+        start_time = time.time()
+
         page = request.args.get("page", 1, type=int)
         per_page = request.args.get("per_page", 10, type=int)
         start_date = request.args.get("start_date")
@@ -130,11 +165,19 @@ async def main():
                 }
             )
 
+        latency = time.time() - start_time
+        requests_latency.observe(latency)
+
         return jsonify({"logs": result, "total": logs.total, "pages": logs.pages})
 
 
     @app.route("/logs", methods=["POST"])
     def create_log():
+        requests_total.inc()
+        status=200 
+        requests_by_status.labels(status).inc()
+        start_time = time.time()
+
         data = request.json
 
         log = Log(
@@ -147,6 +190,9 @@ async def main():
 
         db.session.add(log)
         db.session.commit()
+
+        latency = time.time() - start_time
+        requests_latency.observe(latency)
 
         return jsonify({"message": "Log creado exitosamente"}), 201
     
