@@ -51,8 +51,9 @@ services:
     ports:
       - 18082:8082
     networks:
-      - my-net
+      - my-net      
     environment:
+      PORT: 8082
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/user_db?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: JOHANMY
       SPRING_DATASOURCE_PASSWORD: JOHANMY
@@ -107,6 +108,22 @@ services:
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
       
+  api-gateway:
+    build:
+      context: ./API_GATEWAY
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - 8086:8086
+    networks:
+      - my-net
+    environment:
+      PORT: 8086
+    depends_on:
+      - nats
+      - api_users
+      - api_logs
+      - api_health
 
   prometheus:
     image: prom/prometheus
