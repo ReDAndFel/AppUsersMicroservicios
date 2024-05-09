@@ -51,33 +51,6 @@ public class UsuarioController {
                 .body(new MessageDTO(HttpStatus.OK, false, usuarioService.obtenerUsuarioPorId(id)));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<MessageDTO> actualizarUsuario(HttpServletRequest request, @PathVariable Integer id,
-            @RequestBody UsuarioModel usuario) throws JsonProcessingException {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String tokenHeader = authorizationHeader.substring(7);
-            if (jwtUtil.isTokenValid(tokenHeader)) {
-                usuarioService.actualizarUsuario(id, usuario);
-                LogDTO logDTO = new LogDTO("Actualizacion", "Api_users", "UsuarioController", "Usuario logueado",
-                        "El usuario con id " + usuario.getId() + " actualizó su información");
-                ObjectMapper objectMapper = new ObjectMapper();
-                String logJson = objectMapper.writeValueAsString(logDTO);
-                natsConnection.publish(natsTema, logJson.getBytes());
-                return ResponseEntity.status(HttpStatus.OK)
-                        .body(new MessageDTO(HttpStatus.OK, false, "Usuario actualizado correctamente"));
-            } else {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new MessageDTO(HttpStatus.UNAUTHORIZED, true,
-                        "El token no es valido para el correo proporcionado"));
-            }
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(new MessageDTO(HttpStatus.UNAUTHORIZED, true,
-                            "Se requiere un token JWT en la cabecera Authorization"));
-        }
-
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<MessageDTO> eliminarUsuario(HttpServletRequest request, @PathVariable Integer id)
             throws JsonProcessingException {
@@ -129,7 +102,6 @@ public class UsuarioController {
                     .body(new MessageDTO(HttpStatus.UNAUTHORIZED, true,
                             "Se requiere un token JWT en la cabecera Authorization"));
         }
-
     }
 
     @PostMapping("recuperarContraseña/{email}")

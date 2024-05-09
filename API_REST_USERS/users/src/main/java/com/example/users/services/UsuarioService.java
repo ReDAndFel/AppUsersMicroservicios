@@ -25,14 +25,7 @@ public class UsuarioService {
         Optional<UsuarioModel> optionalUsuario = usuarioRepository.findById(id);
         return optionalUsuario.get();
     }
-
-    public UsuarioModel actualizarUsuario(int id, UsuarioModel usuario) {
-        UsuarioModel usuarioAux = usuarioRepository.findById(id).get();
-        usuarioAux.setFirstName(usuario.getFirstName());
-        usuarioAux.setLastName(usuario.getLastName());
-        return usuarioRepository.save(usuarioAux);
-    }
-
+    
     public UsuarioModel cambiarContraseña(int id, UsuarioModel usuario) {
         UsuarioModel usuarioAux = usuarioRepository.findById(id).get();
         usuarioAux.setContrasena(usuario.getContrasena());
@@ -45,6 +38,7 @@ public class UsuarioService {
         return "Correo de recuperación enviado";
     }
 
+    //Cambiar para que elimine en esta api y el perfil de la api perfiles
     public boolean eliminarUsuario(Integer id) {
         if (usuarioRepository.existsById(id)) {
             usuarioRepository.deleteById(id);
@@ -52,4 +46,5 @@ public class UsuarioService {
         }
         return false;
     }
+
 }
