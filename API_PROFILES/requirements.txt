@@ -1,0 +1,5 @@
+flask[async]
+flask_sqlalchemy
+requests
+sqlalchemy
+mysql-connector-python

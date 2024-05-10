@@ -1,0 +1,18 @@
+# Imagen base de Go
+FROM golang:1.16-alpine
+
+# Instalar git (necesario para el comando go get)
+RUN apk add --no-cache git
+
+# Copiar el código fuente de tu aplicación
+COPY . /app
+WORKDIR /app
+
+# Obtener el controlador de MySQL
+RUN go get github.com/go-sql-driver/mysql
+
+# Compilar la aplicación
+RUN go build -o app
+
+# Ejecutar la aplicación compilada
+CMD ["./app"]

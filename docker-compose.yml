@@ -43,6 +43,23 @@ services:
     volumes:
       - ./API_LOGS/database/data.sql:/docker-entrypoint-initdb.d/data.sql
 
+  mysql_profiles:
+    build:
+      context: ./API_PROFILES/database/
+      dockerfile: dockerfile
+    restart: always
+    ports:
+      - 13303:3306
+    networks:
+      - my-net
+    environment:
+      MYSQL_DATABASE: api_profiles
+      MYSQL_USER: guarda
+      MYSQL_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ./API_PROFILES/database/data.sql:/docker-entrypoint-initdb.d/data.sql
+
   api_users:
     build:
       context: ./API_REST_USERS/users/
@@ -61,6 +78,7 @@ services:
       HOST_SMTP: smtp.sendgrid.net
       PORT_SMTP: 465
       USER_SMTP: apikey
+
       NATS_URL: nats://nats:4222
       NATS_TEMA: mensajes
 
@@ -108,6 +126,33 @@ services:
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
       
+
+  api_profiles:
+    build: 
+      context: ./API_PROFILES
+      dockerfile: dockerfile
+    restart: always
+    ports: 
+     - 8084:8084
+    networks:
+      - my-net
+    environment:
+      PORT: 8084
+      DB_PROFILE_HOST: mysql_profiles
+      DB_PROFILE_NAME: api_profiles
+      DB_PROFILE_USERNAME: guarda
+      DB_PROFILE_PASSWORD: 1234
+    depends_on:
+      - mysql_profiles
+      - nats
+      - api_logs
+      - api_users
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10  
+
   api-gateway:
     build:
       context: ./API_GATEWAY
@@ -124,6 +169,7 @@ services:
       - api_users
       - api_logs
       - api_health
+      - api_profiles
 
   prometheus:
     image: prom/prometheus
