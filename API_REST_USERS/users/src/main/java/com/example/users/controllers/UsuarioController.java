@@ -33,7 +33,7 @@ public class UsuarioController {
     @Autowired
     private JwtInterface jwtUtil;
 
-    @PostMapping
+    @PostMapping("/")
     public ResponseEntity<MessageDTO> crearUsuario(@RequestBody UsuarioModel usuario) throws JsonProcessingException {
         usuarioService.guardarUsuario(usuario);
         LogDTO logDTO = new LogDTO("Registro", "Api_users", "UsuarioController", "Usuario logueado",

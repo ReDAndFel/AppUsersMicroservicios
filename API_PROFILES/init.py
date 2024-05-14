@@ -1,6 +1,9 @@
-from flask import Flask, jsonify, request
+import asyncio
 import requests
 import os
+import json
+from nats.aio.client import Client as NATS
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -8,6 +11,10 @@ app.config["SQLALCHEMY_DATABASE_URI"] = (
     f"mysql+mysqlconnector://{os.environ['DB_PROFILE_USERNAME']}:{os.environ['DB_PROFILE_PASSWORD']}@{os.environ['DB_PROFILE_HOST']}/{os.environ['DB_PROFILE_NAME']}"
 )
 db = SQLAlchemy(app)
+
+# Configuración de conexión a NATS
+nats_host = 'nats'
+nats_port = 4222
 
 json_data = {
     "tipo": "",
@@ -31,6 +38,23 @@ class profiles(db.Model):
     organizacion = db.Column(db.String(100), nullable=True)
     pais = db.Column(db.String(50), nullable=True)
     redes_sociales = db.Column(db.JSON, nullable=True)
+
+# Función para crear un nuevo perfil de usuario
+def crear_perfil_usuario(datos_profile):
+    # Crear un nuevo registro en la tabla Usuario
+    nuevo_usuario = profiles(
+        id=datos_profile['id'],
+        pagina_personal=datos_profile.get('pagina_personal'),
+        apodo=datos_profile.get('apodo'),
+        contacto_publico=datos_profile.get('contacto_publico', False),
+        direccion=datos_profile.get('direccion'),
+        biografia=datos_profile.get('biografia'),
+        organizacion=datos_profile.get('organizacion'),
+        pais=datos_profile.get('pais'),
+        redes_sociales=datos_profile.get('redes_sociales')
+    )
+    db.session.add(nuevo_usuario)
+    db.session.commit()
 
 def enviar_log(json_data):
     try:
@@ -68,5 +92,27 @@ def actualizar_perfil(id):
 
     return jsonify({'mensaje': 'Perfil actualizado correctamente'})
 
+async def main():
+    # Configurar el suscriptor de mensajes de NATS
+    nc = NATS()
+    await nc.connect(servers=[f"{nats_host}:{nats_port}"])
+
+    async def callback(msg):
+        datos_profile = json.loads(msg.data.decode())
+        crear_perfil_usuario(datos_profile)
+
+    await nc.subscribe("Cola_registro_usuarios", cb=callback)
+    print('Esperando eventos de registro de usuarios. Presiona CTRL+C para salir.')
+
+    while True:
+        try:
+            await asyncio.sleep(5)
+        except KeyboardInterrupt:
+            break
+    
+    await nc.close()
+
 if __name__ == '__main__':
+    asyncio.run(main())
     app.run(host='0.0.0.0', port=os.environ['PORT'], debug=True)
+    

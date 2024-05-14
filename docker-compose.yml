@@ -76,6 +76,7 @@ services:
       SPRING_DATASOURCE_PASSWORD: JOHANMY
       SPRING_DDL-AUTO: update
       HOST_SMTP: smtp.sendgrid.net
+      
       PORT_SMTP: 465
       USER_SMTP: apikey
 
@@ -125,7 +126,7 @@ services:
       SMTP_SERVER: smtp.gmail.com
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
-      
+
 
   api_profiles:
     build: 
