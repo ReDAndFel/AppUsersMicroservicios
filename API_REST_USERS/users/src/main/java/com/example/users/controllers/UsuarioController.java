@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.users.DTO.LogDTO;
+import com.example.users.DTO.ProfileDTO;
 import com.example.users.models.UsuarioModel;
 import com.example.users.models.dtos.MessageDTO;
 import com.example.users.services.JwtInterface;
@@ -34,13 +35,19 @@ public class UsuarioController {
     private JwtInterface jwtUtil;
 
     @PostMapping("/")
-    public ResponseEntity<MessageDTO> crearUsuario(@RequestBody UsuarioModel usuario) throws JsonProcessingException {
+    public ResponseEntity<MessageDTO> crearUsuario(@RequestBody ProfileDTO profileDTO) throws JsonProcessingException {
+        UsuarioModel usuario = new UsuarioModel();
+        usuario.setEmail(profileDTO.getEmail());
+        usuario.setContrasena(profileDTO.getPassword());
         usuarioService.guardarUsuario(usuario);
         LogDTO logDTO = new LogDTO("Registro", "Api_users", "UsuarioController", "Usuario logueado",
                 "El usuario con id " + usuario.getId() + " se creo");
         ObjectMapper objectMapper = new ObjectMapper();
         String logJson = objectMapper.writeValueAsString(logDTO);
         natsConnection.publish(natsTema, logJson.getBytes());
+        ObjectMapper objetoMapper = new ObjectMapper();
+        String profileJson = objetoMapper.writeValueAsString(profileDTO);
+        natsConnection.publish("profile", profileJson.getBytes());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new MessageDTO(HttpStatus.CREATED, false, "Usuario creado correctamente"));
     }

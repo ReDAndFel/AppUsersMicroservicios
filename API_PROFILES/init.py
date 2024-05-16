@@ -63,47 +63,48 @@ def enviar_log(json_data):
     except requests.exceptions.RequestException as e:
         print(f'Error al enviar log: {e}')
 
-@app.route('/usuarios/<int:id>', methods=['PUT'])
-def actualizar_perfil(id):
-    json_data['tipo'] = "Actualizar"
-    json_data['aplicacion'] = "Api_profiles"
-    json_data['clase_modulo'] = "inti"
-    json_data['resumen'] = f'Servicio de actualizar usuario {id} invocado'
-    json_data['descripcion'] = "Se actualizó el perfil del usuario"
-
-    enviar_log(json_data)
-
-    usuario = profiles.query.get(id)
-    if not usuario:
-        return jsonify({'mensaje': 'Usuario no encontrado'}), 404
-    
-    datos = request.get_json()
-
-    usuario.pagina_personal = datos.get('pagina_personal', usuario.pagina_personal)
-    usuario.apodo = datos.get('apodo', usuario.apodo)
-    usuario.contacto_publico = datos.get('contacto_publico', usuario.contacto_publico)
-    usuario.direccion = datos.get('direccion', usuario.direccion)
-    usuario.biografia = datos.get('biografia', usuario.biografia)
-    usuario.organizacion = datos.get('organizacion', usuario.organizacion)
-    usuario.pais = datos.get('pais', usuario.pais)
-    usuario.redes_sociales = datos.get('redes_sociales', usuario.redes_sociales)
-
-    db.session.commit()
-
-    return jsonify({'mensaje': 'Perfil actualizado correctamente'})
-
 async def main():
     # Configurar el suscriptor de mensajes de NATS
     nc = NATS()
-    await nc.connect(servers=[f"{nats_host}:{nats_port}"])
+    await nc.connect(servers=[f"nats://{nats_host}:{nats_port}"])
 
     async def callback(msg):
         datos_profile = json.loads(msg.data.decode())
         crear_perfil_usuario(datos_profile)
 
-    await nc.subscribe("Cola_registro_usuarios", cb=callback)
+    await nc.subscribe("profile", cb=callback)
     print('Esperando eventos de registro de usuarios. Presiona CTRL+C para salir.')
 
+    @app.route('/usuarios/<int:id>', methods=['PUT'])
+    def actualizar_perfil(id):
+        json_data['tipo'] = "Actualizar"
+        json_data['aplicacion'] = "Api_profiles"
+        json_data['clase_modulo'] = "inti"
+        json_data['resumen'] = f'Servicio de actualizar usuario {id} invocado'
+        json_data['descripcion'] = "Se actualizó el perfil del usuario"
+
+        enviar_log(json_data)
+
+        usuario = profiles.query.get(id)
+        if not usuario:
+            return jsonify({'mensaje': 'Usuario no encontrado'}), 404
+    
+        datos = request.get_json()
+
+        usuario.pagina_personal = datos.get('pagina_personal', usuario.pagina_personal)
+        usuario.apodo = datos.get('apodo', usuario.apodo)
+        usuario.contacto_publico = datos.get('contacto_publico', usuario.contacto_publico)
+        usuario.direccion = datos.get('direccion', usuario.direccion)
+        usuario.biografia = datos.get('biografia', usuario.biografia)
+        usuario.organizacion = datos.get('organizacion', usuario.organizacion)
+        usuario.pais = datos.get('pais', usuario.pais)
+        usuario.redes_sociales = datos.get('redes_sociales', usuario.redes_sociales)
+
+        db.session.commit()
+
+        return jsonify({'mensaje': 'Perfil actualizado correctamente'})
+    
+    app.run(host='0.0.0.0', port=os.environ['PORT'], debug=True)
     while True:
         try:
             await asyncio.sleep(5)
@@ -114,5 +115,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-    app.run(host='0.0.0.0', port=os.environ['PORT'], debug=True)
     

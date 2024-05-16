@@ -3,3 +3,4 @@ flask_sqlalchemy
 requests
 sqlalchemy
 mysql-connector-python
+nats-py

@@ -126,7 +126,7 @@ services:
       SMTP_SERVER: smtp.gmail.com
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
-
+      
 
   api_profiles:
     build: 

@@ -2,15 +2,18 @@ import datetime
 import json
 import os
 import time
+import threading
+import asyncio
 from urllib.parse import urlparse
 from flask import Flask, request, jsonify, Response
 from flask_sqlalchemy import SQLAlchemy
 from nats import NATS
 from nats.aio.client import Msg
+from nats.aio.errors import ErrConnectionClosed, ErrTimeout, ErrNoServers
 from sqlalchemy import and_
 from prometheus_client import make_wsgi_app, Counter, Gauge, Histogram, generate_latest
 from werkzeug.middleware.dispatcher import DispatcherMiddleware
-import asyncio
+
 
 app = Flask(__name__)
 # mysql+mysqlconnector://usuario_database:password_database@host_database/name_database
@@ -34,7 +37,7 @@ db = SQLAlchemy(app)
 nats_client = NATS()
 
 MAX_RETRIES = 3  # Número máximo de reintentos
-RETRY_DELAY = 5  # Tiempo de espera en segundos entre reintentos
+RETRY_DELAY = 2  # Tiempo de espera en segundos entre reintentos
 
 class Log(db.Model):
     __tablename__ = "logs"  # Especifica el nombre de la tabla
@@ -52,20 +55,63 @@ class Log(db.Model):
     resumen = db.Column(db.String(255), nullable=False)
     descripcion = db.Column(db.String(255), nullable=False)
 
-async def main():
+# Suscribirse al tema 'logs' y definir la función de controlador
+async def handle_logs(msg: Msg):
+    print("Recibiendo mensaje por el tema logs...")
+    data = msg.data.decode()
+    # Suponiendo que los mensajes son objetos JSON
+    try: 
+        log_data = json.loads(data)
+    
+        print("Mensaje recibido!")
+        # Crear un registro de log en la base de datos
+        log = Log(
+            tipo=log_data["tipo"],
+            aplicacion=log_data["aplicacion"],
+            clase_modulo=log_data["clase_modulo"],
+            resumen=log_data["resumen"],
+            descripcion=log_data["descripcion"],
+        )
+        db.session.add(log)
+        db.session.commit()
+    except Exception as e:
+        print("Error al procesar el mensaje de logs: ", )
+
+async def setup_nats():
     # Configurar el cliente NATS
     nc = NATS()
-    print("configurando nats...")
 
-    # Conectar al servidor NATS
-    await nc.connect(os.environ["NATS_URL"])
-    print("conectado a nats!")
+    async def message_handler(msg):
+        subject = msg.subject
+        data = msg.data.decode()
+        print(f'Mensaje recibida de {subject}:{data}')
 
-    print("suscribiendose al tema....")
-    # Suscribirse al tema 'logs' y definir la función de controlador
-    await nc.subscribe(os.environ["NATS_TEMA"], cb=handle_logs)
-    print("suscripcion realizada")
+    async def closed_cb():
+        print('Connection to NATS is closed.')
 
+    async def error_cb(e):
+        print(f'Error: {e}')
+
+    options = {
+        "servers": [os.environ["NATS_URL"]],
+        "closed_cb": closed_cb,
+        "error_cb": error_cb,
+    }
+
+    while True:
+        try:
+            await nc.connect(**options)
+            print('¡Conectado a NATS!')
+
+            await nc.subscribe(os.environ["NATS_TEMA"], cb=message_handler)
+
+            while nc.is_connected:
+                await asyncio.sleep(2)
+        except (ErrConnectionClosed, ErrTimeout, ErrNoServers) as e:
+            print(f'Error al conectarse al NATS: {e}')
+            await asyncio.sleep(RETRY_DELAY) # Esperar 5 segundos antes de reconectarse
+
+async def main():
     @app.route('/metrics')
     def metrics():
         # Incrementar métricas
@@ -198,26 +244,6 @@ async def main():
     
     app.run(debug=True, host="0.0.0.0", port=os.environ["PORT"])
 
-# Suscribirse al tema 'logs' y definir la función de controlador
-async def handle_logs(msg: Msg):
-    print("Recibiendo mensaje por el tema logs...")
-    data = msg.data.decode()
-    # Suponiendo que los mensajes son objetos JSON
-    log_data = json.loads(data)
-    
-    print("Mensaje recibido!")
-    # Crear un registro de log en la base de datos
-    log = Log(
-        tipo=log_data["tipo"],
-        aplicacion=log_data["aplicacion"],
-        clase_modulo=log_data["clase_modulo"],
-        resumen=log_data["resumen"],
-        descripcion=log_data["descripcion"],
-    )
-    db.session.add(log)
-    db.session.commit()
-
-
 # Obtener el nombre de la base de datos desde la URI de la base de datos
 def get_database_name():
     db_uri = app.config["SQLALCHEMY_DATABASE_URI"]
@@ -302,8 +328,14 @@ async def readiness_check():
         return jsonify({"status": "UP"})
     else:
         return jsonify({"status": "DOWN"})
+    
+def setup_nats_main():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(setup_nats())
 
 if __name__ == "__main__":
     import datetime
     app.config['START_TIME'] = datetime.datetime.now()
+    threading.Thread(target=setup_nats_main, daemon=True).start()
     asyncio.run(main())
