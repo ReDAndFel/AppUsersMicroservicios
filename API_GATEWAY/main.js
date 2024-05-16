@@ -91,7 +91,7 @@ app.put('/usuarios/:id', async (req, res) => {
     try {
         const id = req.params.id
         const token = req.headers.authorization
-        const response = await axios.put(`http://api_users:8082/usuarios/${id}`, req.body, {
+        const response = await axios.put(`http://api_profiles:8084/usuarios/${id}`, req.body, {
             headers: {
                 Authorization: token
             }
