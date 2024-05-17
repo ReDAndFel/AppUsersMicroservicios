@@ -1,5 +1,5 @@
-flask[async]
-flask_sqlalchemy
+fastapi==0.111.0
+uvicorn==0.15.0
 requests
 sqlalchemy
 mysql-connector-python

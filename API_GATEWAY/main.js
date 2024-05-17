@@ -91,13 +91,16 @@ app.put('/usuarios/:id', async (req, res) => {
     try {
         const id = req.params.id
         const token = req.headers.authorization
-        const response = await axios.put(`http://api_profiles:8084/usuarios/${id}`, req.body, {
+        const responseUsers = await axios.put(`http://api_users:8082/usuarios/${id}`, req.body, {
             headers: {
                 Authorization: token
             }
         })
         logger.info('Peticion a actualizar usuario de api_users reenviada')
-        res.send(response.data)
+        const responseProfiles = await axios.put(`http://api_profiles:8084/usuarios/${id}`, req.body)
+        logger.info('Peticion a actualizar usuario de api_profiles reenviada')
+
+        res.send(responseUsers.data, responseProfiles.data)
     } catch (error) {
         logger.error('Error al reenviar la peticion', error)
         res.status(500).json({ error: 'Error al reenviar la peticion' })

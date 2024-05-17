@@ -16,7 +16,6 @@ public class UsuarioModel {
 
     @Id
     @EqualsAndHashCode.Include
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(unique = true, nullable = false, name = "id")
     private Integer id;
 

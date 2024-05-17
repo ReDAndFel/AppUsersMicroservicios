@@ -4,7 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.example.users.DTO.LogDTO;
 import com.example.users.DTO.ProfileDTO;
@@ -34,9 +42,24 @@ public class UsuarioController {
     @Autowired
     private JwtInterface jwtUtil;
 
+    @PutMapping("/{id}")
+    public ResponseEntity<MessageDTO> actualizarUsuario(@RequestBody ProfileDTO profileDTO, @PathVariable int id) throws JsonProcessingException {
+        UsuarioModel usuario = usuarioService.obtenerUsuarioPorId(id);
+        usuario.setEmail(profileDTO.getEmail());
+        usuarioService.guardarUsuario(usuario);
+        LogDTO logDTO = new LogDTO("Actualizar", "Api_users", "UsuarioController", "Usuario actualizado",
+                "El usuario con id " + usuario.getId() + " se actualizó");
+        ObjectMapper objectMapper = new ObjectMapper();
+        String logJson = objectMapper.writeValueAsString(logDTO);
+        natsConnection.publish(natsTema, logJson.getBytes());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new MessageDTO(HttpStatus.CREATED, false, "Usuario actualizado correctamente"));
+    }
+
     @PostMapping("/")
     public ResponseEntity<MessageDTO> crearUsuario(@RequestBody ProfileDTO profileDTO) throws JsonProcessingException {
         UsuarioModel usuario = new UsuarioModel();
+        usuario.setId(profileDTO.getId());
         usuario.setEmail(profileDTO.getEmail());
         usuario.setContrasena(profileDTO.getPassword());
         usuarioService.guardarUsuario(usuario);

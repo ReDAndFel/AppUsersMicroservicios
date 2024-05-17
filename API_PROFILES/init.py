@@ -3,14 +3,19 @@ import requests
 import os
 import json
 from nats.aio.client import Client as NATS
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
+from fastapi import FastAPI, Response
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Boolean, Text, JSON
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    f"mysql+mysqlconnector://{os.environ['DB_PROFILE_USERNAME']}:{os.environ['DB_PROFILE_PASSWORD']}@{os.environ['DB_PROFILE_HOST']}/{os.environ['DB_PROFILE_NAME']}"
-)
-db = SQLAlchemy(app)
+app = FastAPI()
+
+# Configurar la base de datos
+SQLALCHEMY_DATABASE_URI = f"mysql+mysqlconnector://{os.environ['DB_PROFILE_USERNAME']}:{os.environ['DB_PROFILE_PASSWORD']}@{os.environ['DB_PROFILE_HOST']}/{os.environ['DB_PROFILE_NAME']}"
+engine = create_engine(SQLALCHEMY_DATABASE_URI)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
 # Configuración de conexión a NATS
 nats_host = 'nats'
@@ -28,33 +33,27 @@ json_data = {
 # Dirección de la API de logs
 LOGS_API_URL = 'http://api_logs:8083/logs'
 
-class profiles(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    pagina_personal = db.Column(db.String(255), nullable=True)
-    apodo = db.Column(db.String(50), nullable=True)
-    contacto_publico = db.Column(db.Boolean, default=False)
-    direccion = db.Column(db.String(255), nullable=True)
-    biografia = db.Column(db.Text, nullable=True)
-    organizacion = db.Column(db.String(100), nullable=True)
-    pais = db.Column(db.String(50), nullable=True)
-    redes_sociales = db.Column(db.JSON, nullable=True)
+class profiles(Base):
+    __tablename__='profiles'
+
+    id = Column(Integer, primary_key=True)
+    pagina_personal = Column(String(255), nullable=True)
+    apodo = Column(String(50), nullable=True)
+    contacto_publico = Column(Boolean, default=False)
+    direccion = Column(String(255), nullable=True)
+    biografia = Column(Text, nullable=True)
+    organizacion = Column(String(100), nullable=True)
+    pais = Column(String(50), nullable=True)
+    redes_sociales = Column(JSON, nullable=True)
 
 # Función para crear un nuevo perfil de usuario
-def crear_perfil_usuario(datos_profile):
+def crear_perfil_usuario(datos_profile, db):
     # Crear un nuevo registro en la tabla Usuario
-    nuevo_usuario = profiles(
-        id=datos_profile['id'],
-        pagina_personal=datos_profile.get('pagina_personal'),
-        apodo=datos_profile.get('apodo'),
-        contacto_publico=datos_profile.get('contacto_publico', False),
-        direccion=datos_profile.get('direccion'),
-        biografia=datos_profile.get('biografia'),
-        organizacion=datos_profile.get('organizacion'),
-        pais=datos_profile.get('pais'),
-        redes_sociales=datos_profile.get('redes_sociales')
-    )
-    db.session.add(nuevo_usuario)
-    db.session.commit()
+    nuevo_usuario = profiles(**datos_profile)
+    db.add(nuevo_usuario)
+    db.commit()
+    db.refresh(nuevo_usuario)
+    return nuevo_usuario
 
 def enviar_log(json_data):
     try:
@@ -70,13 +69,15 @@ async def main():
 
     async def callback(msg):
         datos_profile = json.loads(msg.data.decode())
-        crear_perfil_usuario(datos_profile)
+        db = SessionLocal()
+        crear_perfil_usuario(datos_profile, db)
+        db.close()
 
     await nc.subscribe("profile", cb=callback)
     print('Esperando eventos de registro de usuarios. Presiona CTRL+C para salir.')
 
-    @app.route('/usuarios/<int:id>', methods=['PUT'])
-    def actualizar_perfil(id):
+    @app.put('/usuarios/{id}', response_model=dict)
+    def actualizar_perfil(id: int, datos: dict, response: Response):
         json_data['tipo'] = "Actualizar"
         json_data['aplicacion'] = "Api_profiles"
         json_data['clase_modulo'] = "inti"
@@ -85,11 +86,11 @@ async def main():
 
         enviar_log(json_data)
 
-        usuario = profiles.query.get(id)
+        db = SessionLocal()
+        usuario = db.query(profiles).get(id)
         if not usuario:
-            return jsonify({'mensaje': 'Usuario no encontrado'}), 404
-    
-        datos = request.get_json()
+            response.status_code = 404
+            return {'mensaje': 'Usuario no encontrado'}
 
         usuario.pagina_personal = datos.get('pagina_personal', usuario.pagina_personal)
         usuario.apodo = datos.get('apodo', usuario.apodo)
@@ -100,19 +101,26 @@ async def main():
         usuario.pais = datos.get('pais', usuario.pais)
         usuario.redes_sociales = datos.get('redes_sociales', usuario.redes_sociales)
 
-        db.session.commit()
+        db.commit()
+        db.close()
 
-        return jsonify({'mensaje': 'Perfil actualizado correctamente'})
+        return {'mensaje': 'Perfil actualizado correctamente'}
     
-    app.run(host='0.0.0.0', port=os.environ['PORT'], debug=True)
-    while True:
+    import uvicorn
+    await uvicorn.run(app, host='0.0.0.0', port=os.environ['PORT'])
+
+"""     while True:
         try:
             await asyncio.sleep(5)
         except KeyboardInterrupt:
             break
     
-    await nc.close()
+    await nc.close() """
 
 if __name__ == '__main__':
-    asyncio.run(main())
+    loop = asyncio.get_event_loop()
+    try:
+        loop.run_until_complete(main())
+    finally:
+        loop.close()
     

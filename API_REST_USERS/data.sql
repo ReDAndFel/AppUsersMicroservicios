@@ -3,7 +3,7 @@ USE user_db;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,    
+    id INT PRIMARY KEY,    
     email VARCHAR(255) NOT NULL,
     contrasena VARCHAR(12) NOT NULL
 );
