@@ -48,12 +48,24 @@ class profiles(Base):
     redes_sociales = Column(JSON, nullable=True)
 
 # Función para crear un nuevo perfil de usuario
-def crear_perfil_usuario(datos_profile, db):
+def crear_perfil_usuario(datos_profile):
+    db = SessionLocal()
+    # Eliminamos los datos innecesarios para esta tabla
+    datos_profile.pop('email', None)
+    datos_profile.pop('password', None)
+
     # Crear un nuevo registro en la tabla Usuario
-    nuevo_usuario = profiles(**datos_profile)
-    db.add(nuevo_usuario)
-    db.commit()
-    db.refresh(nuevo_usuario)
+    try:
+        nuevo_usuario = profiles(**datos_profile)
+        db.add(nuevo_usuario)
+        db.commit()
+        db.refresh(nuevo_usuario)
+    except Exception as e:
+        db.rollback()
+        raise e
+    finally:
+        db.close()
+        
     return nuevo_usuario
 
 def enviar_log(json_data):
@@ -99,19 +111,24 @@ async def nats_listener():
     await nc.connect(servers=[f"nats://{nats_host}:{nats_port}"])
 
     async def callback(msg):
-        datos_profile = json.loads(msg.data.decode())
-        db = SessionLocal()
-        crear_perfil_usuario(datos_profile, db)
-        db.close()
+        try:
+            datos_profile = json.loads(msg.data.decode())
+            crear_perfil_usuario(datos_profile)
+        except Exception as e:
+            print(f"Error al procesar el mensaje de logs: {e}")
 
     await nc.subscribe("profile", cb=callback)
     print('Esperando eventos de registro de usuarios. Presiona CTRL+C para salir.')
 
-
+async def main():
+    # Crear tareas asincronas setup_nats y uvicorn
+    configuracion = uvicorn.Config(app, host='0.0.0.0', port = int(os.environ['PORT']), log_level='info')
+    servidor = uvicorn.Server(configuracion)
+    await asyncio.gather(
+        nats_listener(),
+        servidor.serve()
+    )
 
 if __name__ == '__main__':
-    port = int(os.environ['PORT'])
-    loop = asyncio.get_event_loop()
-    loop.create_task(nats_listener())
-    uvicorn.run(app, host='0.0.0.0', port=port)
+    asyncio.run(main())
     

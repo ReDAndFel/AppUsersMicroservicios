@@ -3,7 +3,7 @@ USE api_profiles;
 DROP TABLE IF EXISTS profiles;
 
 CREATE TABLE profiles (
-    id INT AUTO_INCREMENT PRIMARY KEY,
+    id INT PRIMARY KEY,
     pagina_personal VARCHAR(255) NOT NULL,
     apodo VARCHAR(50) NOT NULL,
     contacto_publico BOOLEAN NOT NULL,

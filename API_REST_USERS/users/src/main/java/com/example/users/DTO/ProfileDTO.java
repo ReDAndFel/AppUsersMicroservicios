@@ -19,5 +19,5 @@ public class ProfileDTO {
     String biografia;
     String organizacion;
     String pais;
-    List<RedesDTO> redes;
+    List<RedesDTO> redes_sociales;
 }
