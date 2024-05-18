@@ -1,5 +1,5 @@
-flask[async]
-flask_sqlalchemy
+fastapi==0.111.0
+uvicorn==0.15.0
 prometheus_client
 Werkzeug>=1.0.0
 sqlalchemy

@@ -2,11 +2,12 @@ import asyncio
 import requests
 import os
 import json
+import uvicorn
 from nats.aio.client import Client as NATS
 from fastapi import FastAPI, Response
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker, declarative_base
+""" from sqlalchemy.ext.declarative import declarative_base """
 from sqlalchemy import Column, Integer, String, Boolean, Text, JSON
 
 app = FastAPI()
@@ -18,8 +19,8 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # Configuración de conexión a NATS
-nats_host = 'nats'
-nats_port = 4222
+nats_host = os.getenv('HOST_NATS', 'nats')
+nats_port = int(os.getenv('PORT_NATS', 4222))
 
 json_data = {
     "tipo": "",
@@ -62,7 +63,37 @@ def enviar_log(json_data):
     except requests.exceptions.RequestException as e:
         print(f'Error al enviar log: {e}')
 
-async def main():
+@app.put('/usuarios/{id}', response_model=dict)
+def actualizar_perfil(id: int, datos: dict, response: Response):
+    json_data['tipo'] = "Actualizar"
+    json_data['aplicacion'] = "Api_profiles"
+    json_data['clase_modulo'] = "inti"
+    json_data['resumen'] = f'Servicio de actualizar usuario {id} invocado'
+    json_data['descripcion'] = "Se actualizó el perfil del usuario"
+
+    enviar_log(json_data)
+
+    db = SessionLocal()
+    usuario = db.query(profiles).get(id)
+    if not usuario:
+        response.status_code = 404
+        return {'mensaje': 'Usuario no encontrado'}
+
+    usuario.pagina_personal = datos.get('pagina_personal', usuario.pagina_personal)
+    usuario.apodo = datos.get('apodo', usuario.apodo)
+    usuario.contacto_publico = datos.get('contacto_publico', usuario.contacto_publico)
+    usuario.direccion = datos.get('direccion', usuario.direccion)
+    usuario.biografia = datos.get('biografia', usuario.biografia)
+    usuario.organizacion = datos.get('organizacion', usuario.organizacion)
+    usuario.pais = datos.get('pais', usuario.pais)
+    usuario.redes_sociales = datos.get('redes_sociales', usuario.redes_sociales)
+
+    db.commit()
+    db.close()
+
+    return {'mensaje': 'Perfil actualizado correctamente'}
+
+async def nats_listener():
     # Configurar el suscriptor de mensajes de NATS
     nc = NATS()
     await nc.connect(servers=[f"nats://{nats_host}:{nats_port}"])
@@ -76,51 +107,11 @@ async def main():
     await nc.subscribe("profile", cb=callback)
     print('Esperando eventos de registro de usuarios. Presiona CTRL+C para salir.')
 
-    @app.put('/usuarios/{id}', response_model=dict)
-    def actualizar_perfil(id: int, datos: dict, response: Response):
-        json_data['tipo'] = "Actualizar"
-        json_data['aplicacion'] = "Api_profiles"
-        json_data['clase_modulo'] = "inti"
-        json_data['resumen'] = f'Servicio de actualizar usuario {id} invocado'
-        json_data['descripcion'] = "Se actualizó el perfil del usuario"
 
-        enviar_log(json_data)
-
-        db = SessionLocal()
-        usuario = db.query(profiles).get(id)
-        if not usuario:
-            response.status_code = 404
-            return {'mensaje': 'Usuario no encontrado'}
-
-        usuario.pagina_personal = datos.get('pagina_personal', usuario.pagina_personal)
-        usuario.apodo = datos.get('apodo', usuario.apodo)
-        usuario.contacto_publico = datos.get('contacto_publico', usuario.contacto_publico)
-        usuario.direccion = datos.get('direccion', usuario.direccion)
-        usuario.biografia = datos.get('biografia', usuario.biografia)
-        usuario.organizacion = datos.get('organizacion', usuario.organizacion)
-        usuario.pais = datos.get('pais', usuario.pais)
-        usuario.redes_sociales = datos.get('redes_sociales', usuario.redes_sociales)
-
-        db.commit()
-        db.close()
-
-        return {'mensaje': 'Perfil actualizado correctamente'}
-    
-    import uvicorn
-    await uvicorn.run(app, host='0.0.0.0', port=os.environ['PORT'])
-
-"""     while True:
-        try:
-            await asyncio.sleep(5)
-        except KeyboardInterrupt:
-            break
-    
-    await nc.close() """
 
 if __name__ == '__main__':
+    port = int(os.environ['PORT'])
     loop = asyncio.get_event_loop()
-    try:
-        loop.run_until_complete(main())
-    finally:
-        loop.close()
+    loop.create_task(nats_listener())
+    uvicorn.run(app, host='0.0.0.0', port=port)
     

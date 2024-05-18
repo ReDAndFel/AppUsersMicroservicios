@@ -102,7 +102,8 @@ services:
       DB_NAME: api_logs
       DB_USERNAME: DBLOGS
       DB_PASSWORD: DBLOGS
-      NATS_URL: nats://nats:4222
+      NATS_PORT: 4222
+      NATS_HOST: nats
       NATS_TEMA: mensajes
     depends_on:
       - mysql_logs
@@ -143,6 +144,9 @@ services:
       DB_PROFILE_NAME: api_profiles
       DB_PROFILE_USERNAME: guarda
       DB_PROFILE_PASSWORD: 1234
+      TEMA_NATS: profile
+      HOST_NATS: nats
+      PORT_NATS: 4222
     depends_on:
       - mysql_profiles
       - nats
