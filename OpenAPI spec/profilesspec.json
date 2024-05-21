@@ -1,0 +1,109 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "title": "Profile API",
+        "version": "1.0.0",
+        "description": "API para gestionar perfiles de usuario"
+    },
+    "paths": {
+        "/usuarios/{id}": {
+            "put": {
+                "summary": "Actualizar perfil de usuario",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "ID del usuario"
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Profile"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Perfil actualizado correctamente",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensaje": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Usuario no encontrado",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "mensaje": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Profile": {
+                "type": "object",
+                "properties": {
+                    "pagina_personal": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "apodo": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "contacto_publico": {
+                        "type": "boolean",
+                        "default": false
+                    },
+                    "direccion": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "biografia": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "organizacion": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "pais": {
+                        "type": "string",
+                        "nullable": true
+                    },
+                    "redes_sociales": {
+                        "type": "object",
+                        "nullable": true
+                    }
+                }
+            }
+        }
+    }
+}
