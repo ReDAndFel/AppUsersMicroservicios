@@ -34,7 +34,7 @@ public class UsuarioService {
 
     public String recuperarContraseña(String email) throws Exception {
         String token = jwtInterface.generateToken(email);
-        emailService.sendEmail(new EmailDTO("Recuperacion de Contraseña", "Su token de recuperacion es: " + token, email));
+        emailService.sendMail(new EmailDTO(email, "Recuperación de contraseña " + token, email));
         return "Correo de recuperación enviado";
     }
 

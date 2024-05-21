@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class EmailDTO {
-    String issuer;
-    String message;
-    String receiver;
+    String to;
+    String subject;
+    String txt;
 }

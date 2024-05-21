@@ -21,7 +21,7 @@ app.post('/login', async (req, res) => {
     console.log("data de la peticion: ")
     console.log(req.body)
     try {
-        const response = await axios.post('http://api_users:8082/login', req.body)
+        const response = await axios.post('http://172.18.0.10:8082/login', req.body)
         logger.info('Peticion al loguearse de api_users reenviada')
         res.send(response.data)
     } catch (error) {
@@ -37,7 +37,7 @@ app.post('/usuarios', async (req, res) => {
     console.log(req.headers)
     console.log(req.body)
     try {
-        const response = await axios.post('http://api_users:8082/usuarios', req.body)
+        const response = await axios.post('http://172.18.0.10:8082/usuarios', req.body)
         logger.info('Peticion a registro de api_users reenviada')
         res.send(response.data)
     } catch (error) {
@@ -54,7 +54,7 @@ app.post('/usuarios/recuperarContraseña/:email', async (req, res) => {
     try {
         const email = req.params.email
         const token = req.headers.authorization
-        const response = await axios.post(`http://api_users:8082/usuarios/recuperarContraseña/${email})`, req.body)
+        const response = await axios.post(`http://172.18.0.10:8082/usuarios/recuperarContraseña/${email})`, req.body)
         logger.info('Peticion a recuperar contraseña de api_users reenviada')
         res.send(response.data)
     } catch (error) {
@@ -70,7 +70,7 @@ app.get('/usuarios/:id', async (req, res) => {
     try {
         const id = req.params.id
         const token = req.headers.authorization
-        const response = await axios.get(`http://api_users:8082/usuarios/${id}`, {
+        const response = await axios.get(`http://172.18.0.10:8082/usuarios/${id}`, {
             headers: {
                 Authorization: token
             }
@@ -91,7 +91,7 @@ app.put('/usuarios/:id', async (req, res) => {
     try {
         const id = req.params.id
         const token = req.headers.authorization
-        const responseUsers = await axios.put(`http://api_users:8082/usuarios/${id}`, req.body, {
+        const responseUsers = await axios.put(`http://172.18.0.10:8082/usuarios/${id}`, req.body, {
             headers: {
                 Authorization: token
             }
@@ -113,7 +113,7 @@ app.put('/usuarios/actualizarContraseña/:id', async (req, res) => {
     console.log(req.body)
     try {
         const id = req.params.id
-        const response = await axios.put(`http://api_users:8082/usuarios/actualizarContraseña/${id}`, {
+        const response = await axios.put(`http://172.18.0.10:8082/usuarios/actualizarContraseña/${id}`, {
             headers: {
                 Authorization: token
             }
@@ -132,7 +132,7 @@ app.delete('/usuarios/:id', async (req, res) => {
     console.log(req.body)
     try {
         const id = req.params.id
-        const response = await axios.delete(`http://api_users:8082/usuarios/${id}`, {
+        const response = await axios.delete(`http://172.18.0.10:8082/usuarios/${id}`, {
             headers: {
                 Authorization: token
             }

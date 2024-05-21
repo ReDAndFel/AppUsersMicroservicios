@@ -1,4 +1,4 @@
-package com.example.users.seguridad;
+package com.example.users.configuracion;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,7 +29,7 @@ public class WebSecurityConfig {
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize -> 
                 authorize
-                    .requestMatchers("/actuator/**").permitAll()
+                    .requestMatchers("/usuarios/**", "/login", "/actuator/**").permitAll()
                     .anyRequest().authenticated());
 
         return http.build();
@@ -38,7 +38,7 @@ public class WebSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://api_gateway:8086")); // Permitir todos los orígenes
+        configuration.setAllowedOrigins(List.of("*")); // Permitir todos los orígenes
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);

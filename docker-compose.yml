@@ -68,18 +68,18 @@ services:
     ports:
       - 18082:8082
     networks:
-      - my-net      
+      my-net:
+        ipv4_address: 172.18.0.10
     environment:
       PORT: 8082
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/user_db?useSSL=false&allowPublicKeyRetrieval=true
       SPRING_DATASOURCE_USERNAME: JOHANMY
       SPRING_DATASOURCE_PASSWORD: JOHANMY
       SPRING_DDL-AUTO: update
-      HOST_SMTP: smtp.sendgrid.net
+      HOST_SMTP: smtp.mailgun.org
+      USER_SMTP: mauricio.burgosg@uqvirtual.edu.co
       
-      PORT_SMTP: 465
-      USER_SMTP: apikey
-
+      PORT_SMTP: 587
       NATS_URL: nats://nats:4222
       NATS_TEMA: mensajes
 
@@ -196,3 +196,6 @@ services:
 
 networks:
   my-net:
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
