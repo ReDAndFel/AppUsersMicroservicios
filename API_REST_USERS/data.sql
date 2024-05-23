@@ -13,4 +13,4 @@ INSERT INTO users(id, email, contrasena) VALUES
 (1, 'admin@email.com', 'admin1'),
 (2, 'johan@email.com', 'johan1'),
 (3, 'maria@email.com', 'maria123'),
-(4, 'andresf.castroc1@uqvirtual.edu.co', 'andres1234');
+(4, 'mabuga23@gmail.com', 'andres1234');

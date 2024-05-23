@@ -146,7 +146,7 @@ public class UsuarioController {
 
         }
 
-        @PutMapping("actualizarContraseña/{id}")
+        @PutMapping("/actualizarContraseña/{id}")
         public ResponseEntity<MessageDTO> actualizarContraseña(HttpServletRequest request, @PathVariable Integer id,
                         @RequestBody UsuarioModel usuario) throws JsonProcessingException {
                 String authorizationHeader = request.getHeader("Authorization");
@@ -175,7 +175,7 @@ public class UsuarioController {
                 }
         }
 
-        @PostMapping("recuperarContraseña/{email}")
+        @PostMapping("/recuperarContrasenia/{email}")
         public ResponseEntity<MessageDTO> recuperarContraseña(@PathVariable String email) throws Exception {
                 LogDTO logDTO = new LogDTO("Recuperacion", "Api_users", "UsuarioController", "Usuario logueado",
                                 "El usuario con el email " + email + " pidio una recuperacion de su contraseña");

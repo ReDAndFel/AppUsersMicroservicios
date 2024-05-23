@@ -1,5 +1,7 @@
 package com.example.users.services;
 
+import org.aspectj.weaver.ast.Test;
+import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.Web.Client;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -26,7 +28,6 @@ public class EmailService {
 
     public void sendMail(EmailDTO emailDTO) {
 
-
         HttpHeaders headers = new HttpHeaders();
         headers.setBasicAuth("api", mailConfig.getApiKey());
         
@@ -35,6 +36,8 @@ public class EmailService {
         body.add("to", emailDTO.getTo());
         body.add("subject", emailDTO.getSubject());
         body.add("text", emailDTO.getTxt());
+        body.add("template", "API_USERS");
+        body.add("h:X-Mailgun-Variables", "Testing template");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
 
