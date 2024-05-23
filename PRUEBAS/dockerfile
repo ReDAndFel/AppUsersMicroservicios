@@ -14,7 +14,8 @@ RUN apt-get update && \
     openssh-server \
     nano \
     wget \
-    && rm -rf /var/lib/apt/lists/* 
+    && rm -rf /var/lib/apt/lists/* \
+    dos2unix
 
 # Instala allure commandline
 RUN wget -O allure-2.14.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.tgz && \
@@ -31,8 +32,9 @@ WORKDIR /app
 COPY . .
 
 # Asegura que run.sh tenga permisos de ejecución
+
 RUN chmod +x ./run.sh
 RUN chmod +x ./llave.sh
 
 # Mantén el contenedor abierto
-CMD ["sh", "-c", "./llave.sh && tail -f /dev/null"]
+CMD ["sh", "-c", "apt-get update && apt-get install dos2unix -y && dos2unix ./run.sh && dos2unix ./llave.sh && bash ./llave.sh && tail -f /dev/null"]
