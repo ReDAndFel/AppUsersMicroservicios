@@ -78,6 +78,8 @@ services:
       SPRING_DDL-AUTO: update
       HOST_SMTP: smtp.mailgun.org
       FROMEMAIL: api_users@sandbox5acd4b3e05014c0bbc53e5e00ea1712b.mailgun.org
+      APIKEY_SMTP: c509849b52e4a1526a785a57fe7c989a-a2dd40a3-7ebe6280
+      DOMAIN_MAILGUN: sandbox5acd4b3e05014c0bbc53e5e00ea1712b.mailgun.org
       PORT_SMTP: 587
       NATS_URL: nats://nats:4222
       NATS_TEMA: mensajes
@@ -126,6 +128,8 @@ services:
       SMTP_SERVER: smtp.gmail.com
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
+      API_KEY: 75a5f2c108d57188c8e3f0147abafc46-a2dd40a3-238127bd
+      MG_DOMAIN: sandbox5acd4b3e05014c0bbc53e5e00ea1712b.mailgun.org
       
 
   api_profiles:

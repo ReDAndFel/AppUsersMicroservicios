@@ -28,7 +28,7 @@ def test_health():
 def test_obtener_log_app():
     with allure.step("Obtener log por aplicación"):
         urlFinal = f"{url}logs/API?from_date=2023-04-16&to_date=2023-12-31&tipo=Login"
-        response = requests.get(url)
+        response = requests.get(urlFinal)
         assert response.status_code == 200
         
 def test_crear_log():
@@ -41,6 +41,6 @@ def test_crear_log():
             "resumen":"Se logueo un usuario",
             "descripcion":"Se logueo el usuario con correo test@gmail.com"
         }
-        response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+        response = requests.post(urlFinal, data=json.dumps(payload), headers={"Content-Type": "application/json"})
         assert response.status_code == 200
         

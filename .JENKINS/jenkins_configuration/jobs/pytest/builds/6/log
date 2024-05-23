@@ -1,0 +1,479 @@
+Started by user [8mha:////4Nita3wYCRxduj1G2MT4V8huTc10nMoTGHqAHpi6MgtnAAAAmh+LCAAAAAAAAP9b85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAzhEgY+/dLi1CL9xKLk0ryUzHwAj/Qt9cMAAAA=[0msantiago arciniegas
+[8mha:////4Osds3MoTJU0/5dfAT/h7sxdqWmT1cIdGgWSa9QGkum6AAAAoh+LCAAAAAAAAP9tjTEOwjAQBM8BClpKHuFItIiK1krDC0x8GCfWnbEdkooX8TX+gCESFVvtrLSa5wtWKcKBo5UdUu8otU4GP9jS5Mixv3geZcdn2TIl9igbHBs2eJyx4YwwR1SwULBGaj0nRzbDRnX6rmuvydanHMu2V1A5c4MHCFXMWcf8hSnC9jqYxPTz/BXAFEIGsfuclm8zQVqFvQAAAA==[0m[Pipeline] Start of Pipeline
+[8mha:////4IwK9WFR2qXaQ7t9BLAtcZkxludFzvCuDQWGM8kdIuXAAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycohUghExsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jduZBmjwAAAAA==[0m[Pipeline] node
+Running on [8mha:////4LJacCTMAjfXi9NLPNGumiWd/NgrN7u6eAHOu7Jr0MPtAAAAoR+LCAAAAAAAAP9b85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAz2EgZR/eT83ILSktQifY2k0sycEt3MPE19AHHxbH3KAAAA[0mJenkins in /var/jenkins_home/workspace/pytest@2
+[8mha:////4E/4ImXxpK5Yz5bY1/9wPF0FrAYS2+Cm1bVLtk27IlC8AAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0gA0xsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jfoP95RwAAAAA==[0m[Pipeline] {
+[8mha:////4LHHqCErv6OCJHY4lNaYR0hP4bqomJFch7FrWZkduEnZAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0gQkxsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jc09154wAAAAA==[0m[Pipeline] stage
+[8mha:////4D2LOhS1nNzrQzN5672+DDtoUs6dPxqxZh4fBROHi3YDAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0ggUxsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jek7ggRwAAAAA==[0m[Pipeline] { (Correr el run.sh)
+[8mha:////4EmF8LTbWmXeFGlLIarIWIXPTtk2dhFIWFUVbriUFCgRAAAAoh+LCAAAAAAAAP9tjTEOAiEURD9rLGwtPQTbaWGsbAmNJ0AWEZb8zwLrbuWJvJp3kLiJlZNMMm+a93rDOic4UbLcG+wdZu14DKOti0+U+lugiXu6ck2YKRguzSSpM+cFJRUDS1gDKwEbgzpQdmgLbIVXD9UGhba9lFS/o4DGdQM8gYlqLiqVL8wJdvexy4Q/z18BzLEA29ce4gfg7KmOvAAAAA==[0m[Pipeline] sh
++ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /app/docker-key root@pytest cd /app && ./run.sh
+Warning: Permanently added 'pytest' (ED25519) to the list of known hosts.
+Creating a virtual environment...
+Requirement already satisfied: pip in ./.env/lib/python3.9/site-packages (20.3.4)
+Collecting pip
+  Downloading pip-24.0-py3-none-any.whl (2.1 MB)
+Requirement already satisfied: setuptools in ./.env/lib/python3.9/site-packages (44.1.1)
+Collecting setuptools
+  Downloading setuptools-70.0.0-py3-none-any.whl (863 kB)
+Collecting wheel
+  Downloading wheel-0.43.0-py3-none-any.whl (65 kB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 44.1.1
+    Uninstalling setuptools-44.1.1:
+      Successfully uninstalled setuptools-44.1.1
+  Attempting uninstall: pip
+    Found existing installation: pip 20.3.4
+    Uninstalling pip-20.3.4:
+      Successfully uninstalled pip-20.3.4
+Successfully installed pip-24.0 setuptools-70.0.0 wheel-0.43.0
+Collecting allure-pytest==2.13.2 (from -r /app/requirements.txt (line 1))
+  Downloading allure_pytest-2.13.2-py3-none-any.whl.metadata (1.8 kB)
+Collecting allure-python-commons==2.13.2 (from -r /app/requirements.txt (line 2))
+  Downloading allure_python_commons-2.13.2-py3-none-any.whl.metadata (1.1 kB)
+Collecting attrs==23.2.0 (from -r /app/requirements.txt (line 3))
+  Downloading attrs-23.2.0-py3-none-any.whl.metadata (9.5 kB)
+Collecting exceptiongroup==1.2.0 (from -r /app/requirements.txt (line 4))
+  Downloading exceptiongroup-1.2.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting fastapi==0.68.0 (from -r /app/requirements.txt (line 5))
+  Downloading fastapi-0.68.0-py3-none-any.whl.metadata (23 kB)
+Collecting flake8==7.0.0 (from -r /app/requirements.txt (line 6))
+  Downloading flake8-7.0.0-py2.py3-none-any.whl.metadata (3.8 kB)
+Collecting flake8-builtins==2.2.0 (from -r /app/requirements.txt (line 7))
+  Downloading flake8_builtins-2.2.0-py3-none-any.whl.metadata (25 kB)
+Collecting iniconfig==2.0.0 (from -r /app/requirements.txt (line 8))
+  Downloading iniconfig-2.0.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting mccabe==0.7.0 (from -r /app/requirements.txt (line 9))
+  Downloading mccabe-0.7.0-py2.py3-none-any.whl.metadata (5.0 kB)
+Collecting packaging==23.2 (from -r /app/requirements.txt (line 10))
+  Downloading packaging-23.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pluggy==1.3.0 (from -r /app/requirements.txt (line 11))
+  Downloading pluggy-1.3.0-py3-none-any.whl.metadata (4.3 kB)
+Collecting pycodestyle==2.11.1 (from -r /app/requirements.txt (line 12))
+  Downloading pycodestyle-2.11.1-py2.py3-none-any.whl.metadata (4.5 kB)
+Collecting pyflakes==3.2.0 (from -r /app/requirements.txt (line 13))
+  Downloading pyflakes-3.2.0-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting pytest==7.4.4 (from -r /app/requirements.txt (line 14))
+  Downloading pytest-7.4.4-py3-none-any.whl.metadata (7.9 kB)
+Collecting tomli==2.0.1 (from -r /app/requirements.txt (line 15))
+  Downloading tomli-2.0.1-py3-none-any.whl.metadata (8.9 kB)
+Collecting requests==2.28.2 (from -r /app/requirements.txt (line 16))
+  Downloading requests-2.28.2-py3-none-any.whl.metadata (4.6 kB)
+Collecting starlette==0.14.2 (from fastapi==0.68.0->-r /app/requirements.txt (line 5))
+  Downloading starlette-0.14.2-py3-none-any.whl.metadata (6.5 kB)
+Collecting pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2 (from fastapi==0.68.0->-r /app/requirements.txt (line 5))
+  Downloading pydantic-1.10.15-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (150 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 150.6/150.6 kB 592.0 kB/s eta 0:00:00
+Collecting charset-normalizer<4,>=2 (from requests==2.28.2->-r /app/requirements.txt (line 16))
+  Downloading charset_normalizer-3.3.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (33 kB)
+Collecting idna<4,>=2.5 (from requests==2.28.2->-r /app/requirements.txt (line 16))
+  Downloading idna-3.7-py3-none-any.whl.metadata (9.9 kB)
+Collecting urllib3<1.27,>=1.21.1 (from requests==2.28.2->-r /app/requirements.txt (line 16))
+  Downloading urllib3-1.26.18-py2.py3-none-any.whl.metadata (48 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 48.9/48.9 kB 901.3 kB/s eta 0:00:00
+Collecting certifi>=2017.4.17 (from requests==2.28.2->-r /app/requirements.txt (line 16))
+  Downloading certifi-2024.2.2-py3-none-any.whl.metadata (2.2 kB)
+Collecting typing-extensions>=4.2.0 (from pydantic!=1.7,!=1.7.1,!=1.7.2,!=1.7.3,!=1.8,!=1.8.1,<2.0.0,>=1.6.2->fastapi==0.68.0->-r /app/requirements.txt (line 5))
+  Downloading typing_extensions-4.11.0-py3-none-any.whl.metadata (3.0 kB)
+Downloading allure_pytest-2.13.2-py3-none-any.whl (10 kB)
+Downloading allure_python_commons-2.13.2-py3-none-any.whl (14 kB)
+Downloading attrs-23.2.0-py3-none-any.whl (60 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.8/60.8 kB 440.6 kB/s eta 0:00:00
+Downloading exceptiongroup-1.2.0-py3-none-any.whl (16 kB)
+Downloading fastapi-0.68.0-py3-none-any.whl (52 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 52.0/52.0 kB 463.8 kB/s eta 0:00:00
+Downloading flake8-7.0.0-py2.py3-none-any.whl (57 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.6/57.6 kB 777.9 kB/s eta 0:00:00
+Downloading flake8_builtins-2.2.0-py3-none-any.whl (18 kB)
+Downloading iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Downloading mccabe-0.7.0-py2.py3-none-any.whl (7.3 kB)
+Downloading packaging-23.2-py3-none-any.whl (53 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.0/53.0 kB 613.4 kB/s eta 0:00:00
+Downloading pluggy-1.3.0-py3-none-any.whl (18 kB)
+Downloading pycodestyle-2.11.1-py2.py3-none-any.whl (31 kB)
+Downloading pyflakes-3.2.0-py2.py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.7/62.7 kB 779.6 kB/s eta 0:00:00
+Downloading pytest-7.4.4-py3-none-any.whl (325 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 325.3/325.3 kB 1.2 MB/s eta 0:00:00
+Downloading tomli-2.0.1-py3-none-any.whl (12 kB)
+Downloading requests-2.28.2-py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.8/62.8 kB 624.9 kB/s eta 0:00:00
+Downloading starlette-0.14.2-py3-none-any.whl (60 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.6/60.6 kB 705.6 kB/s eta 0:00:00
+Downloading certifi-2024.2.2-py3-none-any.whl (163 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163.8/163.8 kB 1.1 MB/s eta 0:00:00
+Downloading charset_normalizer-3.3.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (142 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 142.3/142.3 kB 1.0 MB/s eta 0:00:00
+Downloading idna-3.7-py3-none-any.whl (66 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 66.8/66.8 kB 727.0 kB/s eta 0:00:00
+Downloading pydantic-1.10.15-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 3.2/3.2 MB 396.4 kB/s eta 0:00:00
+Downloading urllib3-1.26.18-py2.py3-none-any.whl (143 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 143.8/143.8 kB 1.5 MB/s eta 0:00:00
+Downloading typing_extensions-4.11.0-py3-none-any.whl (34 kB)
+Installing collected packages: urllib3, typing-extensions, tomli, starlette, pyflakes, pycodestyle, pluggy, packaging, mccabe, iniconfig, idna, exceptiongroup, charset-normalizer, certifi, attrs, requests, pytest, pydantic, flake8, allure-python-commons, flake8-builtins, fastapi, allure-pytest
+Successfully installed allure-pytest-2.13.2 allure-python-commons-2.13.2 attrs-23.2.0 certifi-2024.2.2 charset-normalizer-3.3.2 exceptiongroup-1.2.0 fastapi-0.68.0 flake8-7.0.0 flake8-builtins-2.2.0 idna-3.7 iniconfig-2.0.0 mccabe-0.7.0 packaging-23.2 pluggy-1.3.0 pycodestyle-2.11.1 pydantic-1.10.15 pyflakes-3.2.0 pytest-7.4.4 requests-2.28.2 starlette-0.14.2 tomli-2.0.1 typing-extensions-4.11.0 urllib3-1.26.18
+Obtaining file:///app
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Checking if build backend supports build_editable: started
+Checking if build backend supports build_editable: finished with status 'done'
+Building wheels for collected packages: pruebas_pytest
+  Building editable for pruebas_pytest (pyproject.toml): started
+  Building editable for pruebas_pytest (pyproject.toml): finished with status 'done'
+  Created wheel for pruebas_pytest: filename=pruebas_pytest-0.0.0-0.editable-py3-none-any.whl size=1426 sha256=56e7169020bdf7d668f0b84822817876019aceac49214830e9af685019daf55c
+  Stored in directory: /tmp/pip-ephem-wheel-cache-e0ydwe_k/wheels/48/5b/9e/815b53f5a8df8525f516b542a370cd64ff3531d89e06062b64
+Successfully built pruebas_pytest
+Installing collected packages: pruebas_pytest
+Successfully installed pruebas_pytest-0.0.0
+============================= test session starts ==============================
+platform linux -- Python 3.9.2, pytest-7.4.4, pluggy-1.3.0
+rootdir: /app
+configfile: pyproject.toml
+testpaths: test
+plugins: allure-pytest-2.13.2
+collected 26 items
+
+test/api-gateway_test.py .F...FFFFFFF                                    [ 46%]
+test/api-healthcheck_test.py ..                                          [ 53%]
+test/api-logs_test.py ....F                                              [ 73%]
+test/api-profiles_test.py .                                              [ 76%]
+test/api-rest-users_test.py ..F.F.                                       [100%]
+
+=================================== FAILURES ===================================
+__________________________________ test_login __________________________________
+
+    def test_login():
+        with allure.step("Se loguea con éxito "):
+            url = f"{url_base}/login"
+            login_data = {
+                "email": "mabuga23@gmail.com",
+                "password": "andres1234"
+            }
+            response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:34: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //login</pre>
+</body>
+</html>
+
+_____________________________ test_obtener_usuario _____________________________
+
+    def test_obtener_usuario():
+        with allure.step("Se obtiene usuario por id" ):
+            url = f"{url_base}/usuarios/2"
+    
+>           bearerToken = test_login()
+
+test/api-gateway_test.py:68: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def test_login():
+        with allure.step("Se loguea con éxito "):
+            url = f"{url_base}/login"
+            login_data = {
+                "email": "mabuga23@gmail.com",
+                "password": "andres1234"
+            }
+            response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:34: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //login</pre>
+</body>
+</html>
+
+___________________________ test_actualizar_usuario ____________________________
+
+    def  test_actualizar_usuario():
+        with allure.step("Se actualiza el usuario" ):
+            url = f"{url_base}/usuarios/1"
+>           bearerToken = test_login()
+
+test/api-gateway_test.py:81: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def test_login():
+        with allure.step("Se loguea con éxito "):
+            url = f"{url_base}/login"
+            login_data = {
+                "email": "mabuga23@gmail.com",
+                "password": "andres1234"
+            }
+            response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:34: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //login</pre>
+</body>
+</html>
+
+____________________________ test_registrar_usuario ____________________________
+
+    def test_registrar_usuario():
+        with allure.step("Se crea un usuario"):
+            url = f"{url_base}/usuarios/"
+            payload = {
+                "id": 0,
+                "email": "example@gmail.com",
+                "password": "12324124",
+                "pagina_personal": "local.org",
+                "apodo": "Puto enano",
+                "contacto_publico": True,
+                "direccion": "maplesoft",
+                "biografia": "Hola mundo",
+                "organizacion": "no se",
+                "pais": "Colombia",
+                "redes_soaiales": [{"Instagram": "red"}]
+            }
+            response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:114: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //usuarios/</pre>
+</body>
+</html>
+
+_____________________________ test_recuperar_clave _____________________________
+
+    def test_recuperar_clave():
+        with allure.step("Se recupera la clave" ):
+            url = f"{url_base}/usuarios/recuperarContrasenia/mabuga23@gmail.com"
+            response = requests.post(url)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:120: AssertionError
+___________________________ test_registrar_servicio ____________________________
+
+    def test_registrar_servicio():
+        with allure.step("Se registra un servicio" ):
+            payload = {
+                "name": "api-logs",
+                "endpoint": "http://api_logs:8083/health",
+                "frequency": 60,
+                "emails": ["mauricio.burgosg@uqvirtual.edu.co"]
+            }
+            url = f"{url_base}/registrar-service"
+            response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:133: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //registrar-service</pre>
+</body>
+</html>
+
+_________________________________ test_health __________________________________
+
+    def test_health():
+        with allure.step("Salú" ):
+            url = f"{url_base}/health"
+            response = requests.get(url)
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:140: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot GET //health</pre>
+</body>
+</html>
+
+____________________________ test_eliminar_usuario _____________________________
+
+    def test_eliminar_usuario():
+        with allure.step("Eliminar usuario"):
+            url = f"{url_base}/usuarios/2"
+>           bearerToken = test_login()
+
+test/api-gateway_test.py:145: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+    def test_login():
+        with allure.step("Se loguea con éxito "):
+            url = f"{url_base}/login"
+            login_data = {
+                "email": "mabuga23@gmail.com",
+                "password": "andres1234"
+            }
+            response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+            print(response.text)
+>           assert response.status_code == 200
+E           assert 404 == 200
+E            +  where 404 = <Response [404]>.status_code
+
+test/api-gateway_test.py:34: AssertionError
+----------------------------- Captured stdout call -----------------------------
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Error</title>
+</head>
+<body>
+<pre>Cannot POST //login</pre>
+</body>
+</html>
+
+________________________________ test_crear_log ________________________________
+
+    def test_crear_log():
+        with allure.step("Crear un log"):
+            urlFinal = f"{url}logs"
+            payload = {
+                "tipo":"Login",
+                "aplicacion":"Api_users",
+                "clase_modulo":"auth_controller",
+                "resumen":"Se logueo un usuario",
+                "descripcion":"Se logueo el usuario con correo test@gmail.com"
+            }
+            response = requests.post(urlFinal, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+>           assert response.status_code == 200
+E           assert 201 == 200
+E            +  where 201 = <Response [201]>.status_code
+
+test/api-logs_test.py:45: AssertionError
+____________________________ test_registrar_usuario ____________________________
+
+    def test_registrar_usuario():
+        with allure.step("Se crea un usuario"):
+            url = f"{url_base}/usuarios/"
+            payload = {
+                "id": 0,
+                "email": "example@gmail.com",
+                "password": "12324124",
+                "pagina_personal": "local.org",
+                "apodo": "Puto enano",
+                "contacto_publico": True,
+                "direccion": "maplesoft",
+                "biografia": "Hola mundo",
+                "organizacion": "no se",
+                "pais": "Colombia",
+                "redes_soaiales": [{"Instagram": "red"}]
+            }
+            response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+>           assert response.status_code == 200
+E           assert 201 == 200
+E            +  where 201 = <Response [201]>.status_code
+
+test/api-rest-users_test.py:52: AssertionError
+___________________________ test_actualizar_usuario ____________________________
+
+    def  test_actualizar_usuario():
+        with allure.step("Se actualiza el usuario" ):
+            url = f"{url_base}/usuarios/1"
+            bearerToken = test_login_exito()
+    
+            headers = {
+                "Authorization": f"Bearer {bearerToken}",
+                "Content-Type": "application/json"
+            }
+    
+            payload = {
+            "email": "johan@email.com"
+            }
+    
+            response = requests.put(url, data=json.dumps(payload), headers=headers)
+>           assert response.status_code == 200
+E           assert 201 == 200
+E            +  where 201 = <Response [201]>.status_code
+
+test/api-rest-users_test.py:94: AssertionError
+=============================== warnings summary ===============================
+test/api-rest-users_test.py::test_login_exito
+  /app/.env/lib/python3.9/site-packages/_pytest/python.py:198: PytestReturnNotNoneWarning: Expected None, but test/api-rest-users_test.py::test_login_exito returned 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtYWJ1Z2EyM0BnbWFpbC5jb20iLCJpc3MiOiJpbmdlc2lzLnVuaXF1aW5kaW8uZWR1LmNvIiwiaWF0IjoxNzE2NDc4ODE3LCJleHAiOjE3MTY0Nzk0MTd9.MlOqkvKEL8RjEneU_nzF9yKzdi8TCukqSDFn37YWHwk', which will be an error in a future version of pytest.  Did you mean to use `assert` instead of `return`?
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED test/api-gateway_test.py::test_login - assert 404 == 200
+FAILED test/api-gateway_test.py::test_obtener_usuario - assert 404 == 200
+FAILED test/api-gateway_test.py::test_actualizar_usuario - assert 404 == 200
+FAILED test/api-gateway_test.py::test_registrar_usuario - assert 404 == 200
+FAILED test/api-gateway_test.py::test_recuperar_clave - assert 404 == 200
+FAILED test/api-gateway_test.py::test_registrar_servicio - assert 404 == 200
+FAILED test/api-gateway_test.py::test_health - assert 404 == 200
+FAILED test/api-gateway_test.py::test_eliminar_usuario - assert 404 == 200
+FAILED test/api-logs_test.py::test_crear_log - assert 201 == 200
+FAILED test/api-rest-users_test.py::test_registrar_usuario - assert 201 == 200
+FAILED test/api-rest-users_test.py::test_actualizar_usuario - assert 201 == 200
+=================== 11 failed, 15 passed, 1 warning in 3.63s ===================
+Generating report to temp directory...
+Report successfully generated to /tmp/1561416325680814864/allure-report
+Starting web server...
+2024-05-23 15:40:24.189:INFO::main: Logging initialized @3882ms to org.eclipse.jetty.util.log.StdErrLog
+Can not open browser because this capability is not supported on your platform. You can use the link below to open the report manually.
+Server started at <http://172.18.0.2:50390/>. Press <Ctrl+C> to exit

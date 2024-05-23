@@ -8,21 +8,23 @@ token = ""
 def login():
     url = f"{url_base}/login"
     login_data = {
-    "email": "andresf.castroc1@uqvirtual.edu.co",
+        "email": "mabuga23@gmail.com",
         "password": "andres1234"
     }
     response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+    print(response.text)
     return response.text
 
 def test_login_exito():
     with allure.step("Se loguea con éxito "):
         url = f"{url_base}/login"
         login_data = {
-        "email": "andresf.castroc1@uqvirtual.edu.co",
-        "password": "andres1234"
+            "email": "mabuga23@gmail.com",
+            "password": "andres1234"
         }
         response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
         assert response.status_code == 200
+        return response.text
         
 def test_health():
     with allure.step("Se verifica la salud: "):
@@ -32,7 +34,7 @@ def test_health():
         
 def test_registrar_usuario():
     with allure.step("Se crea un usuario"):
-        url = f"{url_base}/usuarios"
+        url = f"{url_base}/usuarios/"
         payload = {
             "id": 0,
             "email": "example@gmail.com",
@@ -52,9 +54,9 @@ def test_registrar_usuario():
         
 def test_obtener_usuario():
     with allure.step("Se obtiene usuario por id" ):
-        url = f"{url_base}/usuarios/36"
+        url = f"{url_base}/usuarios/2"
         
-        bearerToken = login()
+        bearerToken = test_login_exito()
         
         headers = {
             "Authorization": f"Bearer {bearerToken}"
@@ -65,7 +67,7 @@ def test_obtener_usuario():
         
     with allure.step("Se obtienen la pagina del usuario" ):
         url = f"{url_base}/usuarios/list?page=0&size=10&sort=id,asc"
-        bearerToken = login()
+        bearerToken = test_login_exito()
         
         headers = {
             "Authorization": f"Bearer {bearerToken}"
@@ -77,7 +79,7 @@ def test_obtener_usuario():
 def  test_actualizar_usuario():
     with allure.step("Se actualiza el usuario" ):
         url = f"{url_base}/usuarios/1"
-        bearerToken = login()
+        bearerToken = test_login_exito()
         
         headers = {
             "Authorization": f"Bearer {bearerToken}",
@@ -88,12 +90,12 @@ def  test_actualizar_usuario():
         "email": "johan@email.com"
         }
         
-        response = requests.put(url, data=json.dumps(payload))
+        response = requests.put(url, data=json.dumps(payload), headers=headers)
         assert response.status_code == 200
     
         
 def test_recuperar_clave():
     with allure.step("Se recupera la clave" ):
-        url = f"{url_base}/usuarios/recuperarContraseña/mabuga23@gmail.com"
+        url = f"{url_base}/usuarios/recuperarContrasenia/mabuga23@gmail.com"
         response = requests.post(url)
         assert response.status_code == 200

@@ -1,0 +1,1 @@
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /app/docker-key root@pytest 'cd /app && ./run.sh'

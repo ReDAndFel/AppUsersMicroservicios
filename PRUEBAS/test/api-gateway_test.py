@@ -8,37 +8,43 @@ token = ""
 def login():
     url = f"{url_base}/login"
     login_data = {
-    "email": "andresf.castroc1@uqvirtual.edu.co",
+        "email": "mabuga23@gmail.com",
         "password": "andres1234"
     }
     response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+    print(response.text)
     return response.text
 
 def test_salud_gateway():
     with allure.step("Salud del gateway"):
-        url = f"{url}health-apigateway"
+        url = f"{url_base}health-apigateway"
         response = requests.get(url)
+        print(response.text)
         assert response.status_code == 200
 
 def test_login():
     with allure.step("Se loguea con éxito "):
         url = f"{url_base}/login"
         login_data = {
-        "email": "andresf.castroc1@uqvirtual.edu.co",
-        "password": "andres1234"
+            "email": "mabuga23@gmail.com",
+            "password": "andres1234"
         }
         response = requests.post(url, data=json.dumps(login_data), headers={"Content-Type": "application/json"})
+        print(response.text)
         assert response.status_code == 200
+        return response.text
         
 def test_logs():
     with allure.step("Obtener los logs"):
         response = requests.get(url_base+"logs")
+        print(response.text)
         assert response.status_code == 200 
 
 def test_obtener_log_app():
     with allure.step("Obtener log por aplicación"):
         urlFinal = f"{url_base}logs/API?from_date=2023-04-16&to_date=2023-12-31&tipo=Login"
-        response = requests.get(url_base)
+        response = requests.get(urlFinal)
+        print(response.text)
         assert response.status_code == 200
 
 def test_crear_log():
@@ -51,42 +57,45 @@ def test_crear_log():
             "resumen":"Se logueo un usuario",
             "descripcion":"Se logueo el usuario con correo test@gmail.com"
         }
-        response = requests.post(url_base, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+        response = requests.post(urlFinal, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+        print(response.text)
         assert response.status_code == 200
 
 def test_obtener_usuario():
     with allure.step("Se obtiene usuario por id" ):
-        url = f"{url_base}/usuarios/36"
+        url = f"{url_base}/usuarios/2"
         
-        bearerToken = login()
+        bearerToken = test_login()
         
         headers = {
-            "Authorization": f"Bearer {bearerToken}"
+            "Authorization": f" Bearer {bearerToken}"
         }
         
         response = requests.get(url, headers=headers)
+        print(response.text)
         assert response.status_code == 200
 
 def  test_actualizar_usuario():
     with allure.step("Se actualiza el usuario" ):
         url = f"{url_base}/usuarios/1"
-        bearerToken = login()
+        bearerToken = test_login()
         
         headers = {
-            "Authorization": f"Bearer {bearerToken}",
+            "Authorization": f" Bearer {bearerToken}",
             "Content-Type": "application/json"
         }
         
         payload = {
-        "email": "johan@email.com"
+            "email": "johan@email.com"
         }
         
-        response = requests.put(url, data=json.dumps(payload))
+        response = requests.put(url, data=json.dumps(payload), headers=headers)
+        print(response.text)
         assert response.status_code == 200
         
 def test_registrar_usuario():
     with allure.step("Se crea un usuario"):
-        url = f"{url_base}/usuarios"
+        url = f"{url_base}/usuarios/"
         payload = {
             "id": 0,
             "email": "example@gmail.com",
@@ -101,11 +110,12 @@ def test_registrar_usuario():
             "redes_soaiales": [{"Instagram": "red"}]
         }
         response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+        print(response.text)
         assert response.status_code == 200
         
 def test_recuperar_clave():
     with allure.step("Se recupera la clave" ):
-        url = f"{url_base}/usuarios/recuperarContraseña/mabuga23@gmail.com"
+        url = f"{url_base}/usuarios/recuperarContrasenia/mabuga23@gmail.com"
         response = requests.post(url)
         assert response.status_code == 200
         
@@ -119,23 +129,26 @@ def test_registrar_servicio():
         }
         url = f"{url_base}/registrar-service"
         response = requests.post(url, data=json.dumps(payload), headers={"Content-Type": "application/json"})
+        print(response.text)
         assert response.status_code == 200
 
 def test_health():
     with allure.step("Salú" ):
         url = f"{url_base}/health"
-        response = requests.post(url)
+        response = requests.get(url)
+        print(response.text)
         assert response.status_code == 200
         
-def eliminar_usuario():
+def test_eliminar_usuario():
     with allure.step("Eliminar usuario"):
         url = f"{url_base}/usuarios/2"
-        bearerToken = login()
+        bearerToken = test_login()
         
         headers = {
-            "Authorization": f"Bearer {bearerToken}"
+            "Authorization": f" Bearer {bearerToken}"
         }
         
-        response = requests.get(url, headers=headers)
+        response = requests.delete(url, headers=headers)
+        print(response.text)
         assert response.status_code == 200
         
