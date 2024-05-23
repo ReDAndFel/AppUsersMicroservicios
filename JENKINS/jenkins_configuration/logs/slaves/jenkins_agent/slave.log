@@ -1,0 +1,23 @@
+Warning: no key algorithms provided; JENKINS-42959 disabled
+SSHLauncher{host='agent', port=22, credentialsId='jenkins_agent', jvmOptions='', javaPath='/usr/local/openjdk-11/bin/java', prefixStartSlaveCmd='', suffixStartSlaveCmd='', launchTimeoutSeconds=60, maxNumRetries=10, retryWaitTime=15, sshHostKeyVerificationStrategy=hudson.plugins.sshslaves.verifiers.KnownHostsFileKeyVerificationStrategy, tcpNoDelay=true, trackCredentials=true}
+[05/23/24 03:20:29] [SSH] Opening SSH connection to agent:22.
+agent
+SSH Connection failed with IOException: "agent", retrying in 15 seconds. There are 10 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 9 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 8 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 7 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 6 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 5 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 4 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 3 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 2 more retries left.
+agent: Temporary failure in name resolution
+SSH Connection failed with IOException: "agent: Temporary failure in name resolution", retrying in 15 seconds. There are 1 more retries left.

@@ -1,0 +1,126 @@
+Started by user [8mha:////4OXCIEryVUcqTjhaMi+0DlcdQeGRXGy8goGMHIrJ0LBkAAAAmh+LCAAAAAAAAP9b85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAypEgY+/dLi1CL9xKLk0ryUzHwAYuwuDcMAAAA=[0mSantiago Arciniegas Cortes
+[8mha:////4IRJNiXl7p/S4yV84ZV0HrvBh8fC/s3bH8Kqkq8MVQOgAAAAoh+LCAAAAAAAAP9tjTEOwjAQBM8BClpKHuFItIiK1krDC0x8GCfWnbEdkooX8TX+gCESFVvtrLSa5wtWKcKBo5UdUu8otU4GP9jS5Mixv3geZcdn2TIl9igbHBs2eJyx4YwwR1SwULBGaj0nRzbDRnX6rmuvydanHMu2V1A5c4MHCFXMWcf8hSnC9jqYxPTz/BXAFEIGsfuclm8zQVqFvQAAAA==[0m[Pipeline] Start of Pipeline
+[8mha:////4EHsW1EyA0tznEbsc7zk6pqNayevwC8Jf2kbaAU5z3upAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycohUghExsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jduZBmjwAAAAA==[0m[Pipeline] node
+Running on [8mha:////4H4dp79hb7rSKYAbYl5sUKdXPQV9MtryTyTW7KkAj4vkAAAAoR+LCAAAAAAAAP9b85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAz2EgZR/eT83ILSktQifY2k0sycEt3MPE19AHHxbH3KAAAA[0mJenkins in /var/jenkins_home/workspace/pytest
+[8mha:////4EFYJPrv78FE8/eKCrCMiW8I+tVv1K70Z9DIOL+7Jp7dAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0gA0xsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jfoP95RwAAAAA==[0m[Pipeline] {
+[8mha:////4Bmh4WL1Q71jQ2c8+7eNB2ZxMedlgj92hMSxkUv4n1A/AAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0gQkxsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jc09154wAAAAA==[0m[Pipeline] stage
+[8mha:////4OIDt7mvWZ9mU/WL4H4771nNyBsLcVM/0elRGDXEvhlOAAAApR+LCAAAAAAAAP9tjTEOwjAUQ3+KOrAycoh0ggUxsUZZOEFIQkgb/d8mKe3EibgadyBQiQlLlmxL1nu+oE4RjhQdby12HpP2vA+jK4lPFLtroIm3dOGaMFGwXNpJkrGnpUrKFhaxClYC1hZ1oOTRZdiIVt1VExS65pxj2Q4CKm8GeAAThZxVzN8yR9jeRpMIf5y/AJj7DGxXvP/86jek7ggRwAAAAA==[0m[Pipeline] { (Running run.sh)
+[8mha:////4EDVf8uUb32sdiN6SSbg3y64gOFT/iVHq0p92jL0M+nMAAAAoh+LCAAAAAAAAP9tjTEOAiEURD9rLGwtPQTbaWGsbAmNJ0AWEZb8zwLrbuWJvJp3kLiJlZNMMm+a93rDOic4UbLcG+wdZu14DKOti0+U+lugiXu6ck2YKRguzSSpM+cFJRUDS1gDKwEbgzpQdmgLbIVXD9UGhba9lFS/o4DGdQM8gYlqLiqVL8wJdvexy4Q/z18BzLEA29ce4gfg7KmOvAAAAA==[0m[Pipeline] sh
++ ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /app/docker-key root@pytest cd /app && ./run.sh
+Warning: Permanently added 'pytest' (ED25519) to the list of known hosts.
+Creating a virtual environment...
+Requirement already satisfied: pip in ./.env/lib/python3.9/site-packages (20.3.4)
+Collecting pip
+  Downloading pip-24.0-py3-none-any.whl (2.1 MB)
+Requirement already satisfied: setuptools in ./.env/lib/python3.9/site-packages (44.1.1)
+Collecting setuptools
+  Downloading setuptools-70.0.0-py3-none-any.whl (863 kB)
+Collecting wheel
+  Downloading wheel-0.43.0-py3-none-any.whl (65 kB)
+Installing collected packages: wheel, setuptools, pip
+  Attempting uninstall: setuptools
+    Found existing installation: setuptools 44.1.1
+    Uninstalling setuptools-44.1.1:
+      Successfully uninstalled setuptools-44.1.1
+  Attempting uninstall: pip
+    Found existing installation: pip 20.3.4
+    Uninstalling pip-20.3.4:
+      Successfully uninstalled pip-20.3.4
+Successfully installed pip-24.0 setuptools-70.0.0 wheel-0.43.0
+Collecting allure-pytest==2.13.2 (from -r /app/requirements.txt (line 1))
+  Downloading allure_pytest-2.13.2-py3-none-any.whl.metadata (1.8 kB)
+Collecting allure-python-commons==2.13.2 (from -r /app/requirements.txt (line 2))
+  Downloading allure_python_commons-2.13.2-py3-none-any.whl.metadata (1.1 kB)
+Collecting attrs==23.2.0 (from -r /app/requirements.txt (line 3))
+  Downloading attrs-23.2.0-py3-none-any.whl.metadata (9.5 kB)
+Collecting exceptiongroup==1.2.0 (from -r /app/requirements.txt (line 4))
+  Downloading exceptiongroup-1.2.0-py3-none-any.whl.metadata (6.6 kB)
+Collecting flake8==7.0.0 (from -r /app/requirements.txt (line 5))
+  Downloading flake8-7.0.0-py2.py3-none-any.whl.metadata (3.8 kB)
+Collecting flake8-builtins==2.2.0 (from -r /app/requirements.txt (line 6))
+  Downloading flake8_builtins-2.2.0-py3-none-any.whl.metadata (25 kB)
+Collecting iniconfig==2.0.0 (from -r /app/requirements.txt (line 7))
+  Downloading iniconfig-2.0.0-py3-none-any.whl.metadata (2.6 kB)
+Collecting mccabe==0.7.0 (from -r /app/requirements.txt (line 8))
+  Downloading mccabe-0.7.0-py2.py3-none-any.whl.metadata (5.0 kB)
+Collecting packaging==23.2 (from -r /app/requirements.txt (line 9))
+  Downloading packaging-23.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pluggy==1.3.0 (from -r /app/requirements.txt (line 10))
+  Downloading pluggy-1.3.0-py3-none-any.whl.metadata (4.3 kB)
+Collecting pycodestyle==2.11.1 (from -r /app/requirements.txt (line 11))
+  Downloading pycodestyle-2.11.1-py2.py3-none-any.whl.metadata (4.5 kB)
+Collecting pyflakes==3.2.0 (from -r /app/requirements.txt (line 12))
+  Downloading pyflakes-3.2.0-py2.py3-none-any.whl.metadata (3.5 kB)
+Collecting pytest==7.4.4 (from -r /app/requirements.txt (line 13))
+  Downloading pytest-7.4.4-py3-none-any.whl.metadata (7.9 kB)
+Collecting tomli==2.0.1 (from -r /app/requirements.txt (line 14))
+  Downloading tomli-2.0.1-py3-none-any.whl.metadata (8.9 kB)
+Downloading allure_pytest-2.13.2-py3-none-any.whl (10 kB)
+Downloading allure_python_commons-2.13.2-py3-none-any.whl (14 kB)
+Downloading attrs-23.2.0-py3-none-any.whl (60 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 60.8/60.8 kB 741.2 kB/s eta 0:00:00
+Downloading exceptiongroup-1.2.0-py3-none-any.whl (16 kB)
+Downloading flake8-7.0.0-py2.py3-none-any.whl (57 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 57.6/57.6 kB 2.5 MB/s eta 0:00:00
+Downloading flake8_builtins-2.2.0-py3-none-any.whl (18 kB)
+Downloading iniconfig-2.0.0-py3-none-any.whl (5.9 kB)
+Downloading mccabe-0.7.0-py2.py3-none-any.whl (7.3 kB)
+Downloading packaging-23.2-py3-none-any.whl (53 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 53.0/53.0 kB 2.5 MB/s eta 0:00:00
+Downloading pluggy-1.3.0-py3-none-any.whl (18 kB)
+Downloading pycodestyle-2.11.1-py2.py3-none-any.whl (31 kB)
+Downloading pyflakes-3.2.0-py2.py3-none-any.whl (62 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 62.7/62.7 kB 2.5 MB/s eta 0:00:00
+Downloading pytest-7.4.4-py3-none-any.whl (325 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 325.3/325.3 kB 2.0 MB/s eta 0:00:00
+Downloading tomli-2.0.1-py3-none-any.whl (12 kB)
+Installing collected packages: tomli, pyflakes, pycodestyle, pluggy, packaging, mccabe, iniconfig, exceptiongroup, attrs, pytest, flake8, allure-python-commons, flake8-builtins, allure-pytest
+Successfully installed allure-pytest-2.13.2 allure-python-commons-2.13.2 attrs-23.2.0 exceptiongroup-1.2.0 flake8-7.0.0 flake8-builtins-2.2.0 iniconfig-2.0.0 mccabe-0.7.0 packaging-23.2 pluggy-1.3.0 pycodestyle-2.11.1 pyflakes-3.2.0 pytest-7.4.4 tomli-2.0.1
+Obtaining file:///app
+  Installing build dependencies: started
+  Installing build dependencies: finished with status 'done'
+  Checking if build backend supports build_editable: started
+  Checking if build backend supports build_editable: finished with status 'done'
+  Getting requirements to build editable: started
+  Getting requirements to build editable: finished with status 'done'
+  Installing backend dependencies: started
+  Installing backend dependencies: finished with status 'done'
+  Preparing editable metadata (pyproject.toml): started
+  Preparing editable metadata (pyproject.toml): finished with status 'done'
+Checking if build backend supports build_editable: started
+Checking if build backend supports build_editable: finished with status 'done'
+Building wheels for collected packages: pruebas_pytest
+  Building editable for pruebas_pytest (pyproject.toml): started
+  Building editable for pruebas_pytest (pyproject.toml): finished with status 'done'
+  Created wheel for pruebas_pytest: filename=pruebas_pytest-0.0.0-0.editable-py3-none-any.whl size=1426 sha256=f986f1de7a4d4ec74c175bd473c893955b7a6592905e6124bb2b4b499e826b4e
+  Stored in directory: /tmp/pip-ephem-wheel-cache-zf1jmlm7/wheels/48/5b/9e/815b53f5a8df8525f516b542a370cd64ff3531d89e06062b64
+Successfully built pruebas_pytest
+Installing collected packages: pruebas_pytest
+Successfully installed pruebas_pytest-0.0.0
+============================= test session starts ==============================
+platform linux -- Python 3.9.2, pytest-7.4.4, pluggy-1.3.0
+rootdir: /app
+configfile: pyproject.toml
+testpaths: test
+plugins: allure-pytest-2.13.2
+collected 1 item
+
+test/welcome_test.py .                                                   [100%]
+
+============================== 1 passed in 0.03s ===============================
+Generating report to temp directory...
+Report successfully generated to /tmp/5465968380102354002/allure-report
+Starting web server...
+2024-05-23 01:33:01.090:INFO::main: Logging initialized @4026ms to org.eclipse.jetty.util.log.StdErrLog
+Can not open browser because this capability is not supported on your platform. You can use the link below to open the report manually.
+Server started at <http://172.18.0.6:50390/>. Press <Ctrl+C> to exit
+Sending interrupt signal to process
+Aborted by [8mha:////4OXCIEryVUcqTjhaMi+0DlcdQeGRXGy8goGMHIrJ0LBkAAAAmh+LCAAAAAAAAP9b85aBtbiIQTGjNKU4P08vOT+vOD8nVc83PyU1x6OyILUoJzMv2y+/JJUBAhiZGBgqihhk0NSjKDWzXb3RdlLBUSYGJk8GtpzUvPSSDB8G5tKinBIGIZ+sxLJE/ZzEvHT94JKizLx0a6BxUmjGOUNodHsLgAypEgY+/dLi1CL9xKLk0ryUzHwAYuwuDcMAAAA=[0mSantiago Arciniegas Cortes
+script returned exit code 255
+[8mha:////4LGfKcqVJBi3rcGdXX06lwqM3HOOSjN0TWWphzzQ9nxNAAAAoh+LCAAAAAAAAP9tjTEOAiEURD9rLGwtPQTbGRNjZUtoPAGyiLDkfxZYdytP5NW8g8RNrJxkknnTvNcb1jnBiZLl3mDvMGvHYxhtXXyi1N8CTdzTlWvCTMFwaSZJnTkvKKkYWMIaWAnYGNSBskNbYCu8eqg2KLTtpaT6HQU0rhvgCUxUc1GpfGFOsLuPXSb8ef4KYI6xADvU7j9Dg2gqvAAAAA==[0m[Pipeline] }
+[8mha:////4EqWmpvutHlpJbyl50MBp9HLOLx6mnAf6skBHXCb5LqvAAAAoh+LCAAAAAAAAP9tjTEOAiEURD9rLGwtPQRbWRhjZUtoPAGyiLDkfxZYdytP5NW8g8RNrJxkknnTvNcb1jnBiZLl3mDvMGvHYxhtXXyi1N8CTdzTlWvCTMFwaSZJnTkvKKkYWMIaWAnYGNSBskNbYCu8eqg2KLTtpaT6HQU0rhvgCUxUc1GpfGFOsLuPXSb8ef4KYI6xADvU7j9J+wGOvAAAAA==[0m[Pipeline] // stage
+[8mha:////4GfeCox+RlRYDczDpqF1L5G6z9wPbGD8J+PeBaovTlbdAAAAox+LCAAAAAAAAP9tjTEOwjAQBDdBFLSUPMIBiQ5R0VppeIFJjHFi3QX7QlLxIr7GH4iIRMVWO9PM641lijhydKqx1HpKlVdd6N301MCxvQYeVMMXVTElDlaVdii5tqcZSxaLeVmOhcbKUhU4eXKCtW7MwxTBkCvOEid30Mh9fccTmZ7KYqJ8YYzY3Po6Mf06fwMYu06Q77aCbP8BhStF0r0AAAA=[0m[Pipeline] }
+[8mha:////4BVejVAeT353/DNyruA1lzJ6dPofrQ0QOLtefYw8hG9pAAAAoh+LCAAAAAAAAP9tjbEOgjAURS8YB1dHP6KEOBon14bFL6hQa6F5D9uHMPlF/pr/IJHEyTvdc5bzemOdIo4cnWotdZ5S7VUfBjc/NXLsroFH1fJF1UyJg1WVHStu7GnBisViWZZjpbGxVAdOnpxgq1vzMEUw5IqzxNkdNHLf3PFEpueymChfmCJ2t6FJTL/O3wCmvhfkZSnI9h+Wl0FxvQAAAA==[0m[Pipeline] // node
+[8mha:////4MFCufIgU5GdHKEzG4HxOUyqWbaC1xP5wwRjQ9sXhipEAAAAoh+LCAAAAAAAAP9tjTESgjAQRT84FraWHiKMtI6VbYbGE0SIMZDZxWQRKk/k1byDjMxY+av/XvNeb6xTxJGjU62lzlOqverD4OanRo7dNfCoWr6omilxsKqyY8WNPS1YsVgsy3KsNDaW6sDJkxNsdWsepgiGXHGWOLuDRu6bO57I9FwWE+ULU8TuNjSJ6df5G8DU94J8Xwqy8gPQ3eZBvQAAAA==[0m[Pipeline] End of Pipeline
+org.jenkinsci.plugins.workflow.actions.ErrorAction$ErrorId: 8ab5dded-870f-49cf-a03f-753fe636989a
+Finished: ABORTED

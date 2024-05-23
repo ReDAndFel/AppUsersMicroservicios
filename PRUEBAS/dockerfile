@@ -1,10 +1,20 @@
-FROM python:3.9-bullseye
+FROM debian:bullseye-slim
 
-# Instala allure
+# Instala Python y wget
+# Instala Python, wget, y python3-venv
+
+USER root
+
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    python3 \
+    python3-pip \
+    python3-venv \
     openjdk-11-jre-headless \
-    && rm -rf /var/lib/apt/lists/*
+    openssh-server \
+    nano \
+    wget \
+    && rm -rf /var/lib/apt/lists/* 
 
 # Instala allure commandline
 RUN wget -O allure-2.14.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.14.0/allure-commandline-2.14.0.tgz && \
@@ -12,8 +22,17 @@ RUN wget -O allure-2.14.0.tgz https://repo.maven.apache.org/maven2/io/qameta/all
     ln -s /opt/allure-2.14.0/bin/allure /usr/bin/allure && \
     rm allure-2.14.0.tgz
 
+RUN echo "PermitRootLogin yes" >> /etc/ssh/sshd_config
+RUN echo "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
+
+
 WORKDIR /app
 
 COPY . .
 
-CMD ["./run.sh"]
+# Asegura que run.sh tenga permisos de ejecución
+RUN chmod +x ./run.sh
+RUN chmod +x ./llave.sh
+
+# Mantén el contenedor abierto
+CMD ["sh", "-c", "./llave.sh && tail -f /dev/null"]

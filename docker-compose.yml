@@ -3,12 +3,12 @@ services:
   nats:
     image: nats:latest
     restart: always
-    command: ["-V", "-DV"]
+    command: [ "-V", "-DV" ]
     ports:
       - 4222:4222
     networks:
       - my-net
-      
+
   mysqldb:
     build:
       context: ./API_REST_USERS/
@@ -69,7 +69,7 @@ services:
       - 18082:8082
     networks:
       my-net:
-        ipv4_address: 172.18.0.10
+        ipv4_address: 172.18.0.25
     environment:
       PORT: 8082
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/user_db?useSSL=false&allowPublicKeyRetrieval=true
@@ -79,6 +79,7 @@ services:
       HOST_SMTP: smtp.mailgun.org
       USER_SMTP: mauricio.burgosg@uqvirtual.edu.co
       
+
       PORT_SMTP: 587
       NATS_URL: nats://nats:4222
       NATS_TEMA: mensajes
@@ -109,10 +110,10 @@ services:
       - mysql_logs
       - nats
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
-      retries: 10  
+      retries: 10
 
   api_health:
     build:
@@ -130,12 +131,12 @@ services:
       
 
   api_profiles:
-    build: 
+    build:
       context: ./API_PROFILES
       dockerfile: dockerfile
     restart: always
-    ports: 
-     - 8084:8084
+    ports:
+      - 8084:8084
     networks:
       - my-net
     environment:
@@ -153,10 +154,10 @@ services:
       - api_logs
       - api_users
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
       interval: 10s
       timeout: 5s
-      retries: 10  
+      retries: 10
 
   api-gateway:
     build:
@@ -185,7 +186,7 @@ services:
     restart: always
     networks:
       - my-net
-  
+
   grafana:
     image: grafana/grafana
     ports:
@@ -193,6 +194,36 @@ services:
     restart: always
     networks:
       - my-net
+
+  pytest: 
+    build:
+      context: ./PRUEBAS
+      dockerfile: dockerfile
+    container_name: pytest
+    ports:
+      - 5600:50390
+      - 2300:22
+    networks:
+      - my-net
+    volumes:
+      - ./llaves_ssh/docker-key.pub:/app/docker-key.pub
+
+  jenkins:
+      build:
+        context: ./JENKINS
+        dockerfile: Dockerfile
+      privileged: true
+      user: root
+      ports:
+        - 19100:8080
+        - 19101:50000
+      container_name: jenkins
+      volumes:
+        - .JENKINS/jenkins_configuration:/var/jenkins_home
+        - /var/run/docker.sock:/var/run/docker.sock
+        - ./llaves_ssh/docker-key:/app/docker-key
+      networks:
+        - my-net
 
 networks:
   my-net:
