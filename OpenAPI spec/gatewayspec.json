@@ -1,0 +1,550 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "API Gateway"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8086",
+            "description": "Development server"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "summary": "Autentica a un usuario.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "email": "andresf.castroc1@uqvirtual.edu.co",
+                                    "password": "andres1234"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Datos del usuario autenticado."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/usuarios": {
+            "post": {
+                "summary": "Registra un nuevo usuario.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "contrasena": {
+                                        "type": "string"
+                                    },
+                                    "created_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "updated_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "example": {
+                                    "id": 2,
+                                    "firstName": "Johan Andres",
+                                    "lastName": "Ospina",
+                                    "email": "johan@email.com",
+                                    "contrasena": "johan1",
+                                    "created_at": "2024-03-01T08:00:00",
+                                    "updated_at": "2024-03-01T08:00:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Datos del usuario registrado."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/usuarios/recuperarContraseña/{email}": {
+            "post": {
+                "summary": "Envía un correo electrónico para recuperar la contraseña de un usuario.",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer"
+                        },
+                        "description": "Bearer token para autorización"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmación del correo electrónico enviado."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/usuarios/{id}": {
+            "get": {
+                "summary": "Obtiene los detalles de un usuario.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer"
+                        },
+                        "description": "Bearer token para autorización"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmación del correo electrónico enviado.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "firstName": {
+                                            "type": "string"
+                                        },
+                                        "lastName": {
+                                            "type": "string"
+                                        },
+                                        "email": {
+                                            "type": "string",
+                                            "format": "email"
+                                        },
+                                        "contrasena": {
+                                            "type": "string"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time"
+                                        }
+                                    },
+                                    "example": {
+                                        "id": 1,
+                                        "firstName": "Nombre",
+                                        "lastName": "Apellido",
+                                        "email": "correo@example.com",
+                                        "contrasena": "contraseña",
+                                        "created_at": "2024-05-22T08:00:00",
+                                        "updated_at": "2024-05-22T08:00:00"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Actualiza los detalles de un usuario.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer"
+                        },
+                        "description": "Bearer token para autorización"
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "integer"
+                                    },
+                                    "firstName": {
+                                        "type": "string"
+                                    },
+                                    "lastName": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email"
+                                    },
+                                    "contrasena": {
+                                        "type": "string"
+                                    },
+                                    "created_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "updated_at": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    }
+                                },
+                                "example": {
+                                    "id": 1,
+                                    "firstName": "NuevoNombre",
+                                    "lastName": "NuevoApellido",
+                                    "email": "nuevo_correo@example.com",
+                                    "contrasena": "nueva_contraseña",
+                                    "created_at": "2024-05-22T08:00:00",
+                                    "updated_at": "2024-05-22T08:00:00"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Confirmación de la actualización del usuario."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Elimina un usuario.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer"
+                        },
+                        "description": "Bearer token para autorización"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmación de la eliminación del usuario."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/usuarios/actualizarContraseña//{id}": {
+            "put": {
+                "summary": "Actualiza la contraseña de un usuario.",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "Bearer"
+                        },
+                        "description": "Bearer token para autorización"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmación de la actualización de la contraseña del usuario."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/logs": {
+            "post": {
+                "summary": "Crea un registro de log.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "tipo": {
+                                        "type": "string"
+                                    },
+                                    "aplicacion": {
+                                        "type": "string"
+                                    },
+                                    "clase_modulo": {
+                                        "type": "string"
+                                    },
+                                    "resumen": {
+                                        "type": "string"
+                                    },
+                                    "descripcion": {
+                                        "type": "string"
+                                    }
+                                },
+                                "example": {
+                                    "tipo": "Login",
+                                    "aplicacion": "Api_users",
+                                    "clase_modulo": "auth_controller",
+                                    "resumen": "Se logueó un usuario",
+                                    "descripcion": "Se logueó el usuario con correo test@gmail.com"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Confirmación del registro del log."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            },
+            "get": {
+                "summary": "Obtiene todos los registros de log.",
+                "responses": {
+                    "200": {
+                        "description": "Lista de registros de log."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/logs/{aplication}": {
+            "get": {
+                "summary": "Obtiene registros de log para una aplicación específica.",
+                "parameters": [
+                    {
+                        "name": "application",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Lista de registros de log para la aplicación específica.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer"
+                                            },
+                                            "timestamp": {
+                                                "type": "string",
+                                                "format": "date-time"
+                                            },
+                                            "message": {
+                                                "type": "string"
+                                            },
+                                            "level": {
+                                                "type": "string"
+                                            },
+                                            "application": {
+                                                "type": "string"
+                                            }
+                                        },
+                                        "examples": [
+                                            {
+                                                "id": 1,
+                                                "timestamp": "2024-05-22T08:00:00",
+                                                "message": "Mensaje de registro",
+                                                "level": "info",
+                                                "application": "nombre_de_la_aplicacion"
+                                            },
+                                            {
+                                                "id": 2,
+                                                "timestamp": "2024-05-22T09:00:00",
+                                                "message": "Otro mensaje de registro",
+                                                "level": "error",
+                                                "application": "nombre_de_la_aplicacion"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/register-service": {
+            "post": {
+                "summary": "Registra un servicio en el sistema de monitoreo de salud.",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "endpoint": {
+                                        "type": "string"
+                                    },
+                                    "frequency": {
+                                        "type": "integer"
+                                    },
+                                    "emails": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string"
+                                        }
+                                    }
+                                },
+                                "example": {
+                                    "name": "api-logs",
+                                    "endpoint": "http://api_logs:8083/health",
+                                    "frequency": 60,
+                                    "emails": [
+                                        "pipecar366@gmail.com"
+                                    ]
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Confirmación del registro del servicio."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Verifica el estado de salud del servicio.",
+                "responses": {
+                    "200": {
+                        "description": "Estado de salud del servicio."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        },
+        "/health-apigateway": {
+            "get": {
+                "summary": "Verifica el estado de salud del API Gateway.",
+                "responses": {
+                    "200": {
+                        "description": "Estado de salud del API Gateway."
+                    },
+                    "500": {
+                        "description": "Error al reenviar la peticion"
+                    }
+                }
+            }
+        }
+    }
+}

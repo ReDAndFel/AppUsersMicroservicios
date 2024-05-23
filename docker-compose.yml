@@ -129,8 +129,7 @@ services:
       SMTP_SERVER: smtp.gmail.com
       SMTP_PORT: 587
       SMTP_USER: mauricio.burgosg@uqvirtual.edu.co
-      
-      
+
 
   api_profiles:
     build: 
@@ -194,6 +193,36 @@ services:
     ports:
       - 3000:3000
     restart: always
+    networks:
+      - my-net
+
+  pytest: 
+    build:
+      context: ./PRUEBAS
+      dockerfile: dockerfile
+    container_name: pytest
+    ports:
+      - 5600:50390
+      - 2300:22
+    networks:
+      - my-net
+    volumes:
+      - ./llaves_ssh/docker-key.pub:/app/docker-key.pub
+
+  jenkins:
+    build:
+      context: ./JENKINS
+      dockerfile: Dockerfile
+    privileged: true
+    user: root
+    ports:
+      - 19100:8080
+      - 19101:50000
+    container_name: jenkins
+    volumes:
+      - .JENKINS/jenkins_configuration:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./llaves_ssh/docker-key:/app/docker-key
     networks:
       - my-net
 
