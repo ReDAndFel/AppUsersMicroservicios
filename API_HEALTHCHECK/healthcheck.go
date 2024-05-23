@@ -1,14 +1,17 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
-	"net/smtp"
 	"os"
 	"strconv"
 	"sync"
 	"time"
+
+	"github.com/mailgun/mailgun-go/v4"
 )
 
 type MicroserviceHealth struct {
@@ -34,6 +37,8 @@ var smtpServer = os.Getenv("SMTP_SERVER")
 var smtpPort, _ = strconv.Atoi(os.Getenv("SMTP_PORT"))
 var smtpUser = os.Getenv("SMTP_USER")
 var smtpPassword = os.Getenv("SMTP_PASSWORD")
+var domain = os.Getenv("MG_DOMAIN")
+var api_key = os.Getenv("PI_KEY")
 
 func checkInitialMicroserviceHealth(microservice Microservice) MicroserviceHealth {
 	resp, err := http.Get(microservice.Endpoint)
@@ -192,12 +197,20 @@ func notifyStatusChange(name, status string, emails []string) {
 }
 
 func sendEmail(to []string, subject, body string) {
-	msg := fmt.Sprintf("From: %s\r\nTo: %s\r\nSubject: %s\r\n\r\n%s", smtpUser, to, subject, body)
-	auth := smtp.PlainAuth("", smtpUser, smtpPassword, smtpServer)
-	err := smtp.SendMail(fmt.Sprintf("%s:%d", smtpServer, smtpPort), auth,
-		smtpUser, to, []byte(msg))
-	if err != nil {
-		fmt.Printf("Error sending email: %s\n", err)
+	mg := mailgun.NewMailgun(domain, api_key)
+
+	sender := "api_health" + domain
+	for _, mails := range to {
+		msg := mg.NewMessage(sender, subject, body, mails)
+		ctx, cancel := context.WithTimeout(context.Background(), time.Second*10)
+		defer cancel()
+
+		_, _, err := mg.Send(ctx, msg)
+
+		if err != nil {
+			log.Fatal("Ocurrió un error: ", err)
+		}
+		fmt.Println("Email enviado con exito")
 	}
 }
 

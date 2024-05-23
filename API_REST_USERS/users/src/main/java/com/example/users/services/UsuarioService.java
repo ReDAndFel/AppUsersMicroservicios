@@ -33,9 +33,15 @@ public class UsuarioService {
     }
 
     public String recuperarContraseña(String email) throws Exception {
-        String token = jwtInterface.generateToken(email);
-        emailService.sendMail(new EmailDTO(email, "Recuperación de contraseña " + token, email));
-        return "Correo de recuperación enviado";
+        try {
+            String token = jwtInterface.generateToken(email);
+            emailService.sendMail(new EmailDTO(email, "Recuperación de contraseña " + token, email));
+            return "Correo de recuperación enviado";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error al enviar el correo";
+        }
+        
     }
 
     //Cambiar para que elimine en esta api y el perfil de la api perfiles

@@ -1,24 +1,51 @@
 package com.example.users.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
+import com.example.users.configuracion.MailConfig;
 import com.example.users.models.dtos.EmailDTO;
 
 @Service
 public class EmailService {
 
-    @Autowired
-    private JavaMailSender mailSender;
+    private static final String MAILGUN_API_URL = "https://api.mailgun.net/v3/";
+    private final MailConfig mailConfig;
+    private final RestTemplate restTemplate;
+
+    public EmailService(MailConfig mailConfig, RestTemplate restTemplate) {
+        this.mailConfig = mailConfig;
+        this.restTemplate = restTemplate;
+    }
 
     public void sendMail(EmailDTO emailDTO) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(emailDTO.getTo());
-        message.setSubject(emailDTO.getSubject());
-        message.setText(emailDTO.getTxt());
-        mailSender.send(message);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBasicAuth("api", mailConfig.getApiKey());
+        
+        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+        body.add("from", mailConfig.getFromEmail());
+        body.add("to", emailDTO.getTo());
+        body.add("subject", emailDTO.getSubject());
+        body.add("text", emailDTO.getTxt());
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(
+            MAILGUN_API_URL + mailConfig.getDomain() + "/messages",
+            HttpMethod.POST,
+            request,
+            String.class
+        ); 
+
+        System.out.println("Response: " + response.getStatusCode());
+        System.out.println("Body: " + response.getBody());
     }
 }

@@ -32,15 +32,16 @@ app.post('/login', async (req, res) => {
 
 //usuarios
 // Ruta para la operación de registro
-app.post('/usuarios', async (req, res) => {
+app.post('/usuarios/', async (req, res) => {
     console.log("data de la peticion: ")
     console.log(req.headers)
     console.log(req.body)
     try {
-        const response = await axios.post('http://172.18.0.10:8082/usuarios', req.body)
+        const response = await axios.post('http://172.18.0.10:8082/usuarios/', req.body)
         logger.info('Peticion a registro de api_users reenviada')
         res.send(response.data)
     } catch (error) {
+        console.log(error)
         logger.error('Error al reenviar la peticion', error)
         res.status(500).json({ error: 'Error al reenviar la peticion' })
 
@@ -91,16 +92,18 @@ app.put('/usuarios/:id', async (req, res) => {
     try {
         const id = req.params.id
         const token = req.headers.authorization
-        const responseUsers = await axios.put(`http://172.18.0.10:8082/usuarios/${id}`, req.body, {
+        console.log("Id: " + id)
+        console.log("token: " + token)
+/*         const responseUsers = await axios.put(`http://172.18.0.10:8082/usuarios/${id}`, req.body, {
             headers: {
                 Authorization: token
             }
         })
-        logger.info('Peticion a actualizar usuario de api_users reenviada')
+        logger.info('Peticion a actualizar usuario de api_users reenviada') */
         const responseProfiles = await axios.put(`http://api_profiles:8084/usuarios/${id}`, req.body)
         logger.info('Peticion a actualizar usuario de api_profiles reenviada')
 
-        res.send(responseUsers.data, responseProfiles.data)
+        res.send(/* responseUsers.data, */ responseProfiles.data)
     } catch (error) {
         logger.error('Error al reenviar la peticion', error)
         res.status(500).json({ error: 'Error al reenviar la peticion' })

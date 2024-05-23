@@ -77,8 +77,10 @@ services:
       SPRING_DATASOURCE_PASSWORD: JOHANMY
       SPRING_DDL-AUTO: update
       HOST_SMTP: smtp.mailgun.org
+      
       USER_SMTP: mauricio.burgosg@uqvirtual.edu.co
       
+      FROMEMAIL: api_users@sandbox5acd4b3e05014c0bbc53e5e00ea1712b.mailgun.org
       PORT_SMTP: 587
       NATS_URL: nats://nats:4222
       NATS_TEMA: mensajes
